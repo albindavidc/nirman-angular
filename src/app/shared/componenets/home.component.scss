@@ -168,13 +168,15 @@
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--md-sys-color-on-surface);
+    line-height: 1.5;
 
     .icon {
-      width: 2rem;
-      height: 2rem;
-      object-fit: contain;
+      width: 2.5rem;
+      height: 2.5rem;
+      flex-shrink: 0;
       display: block;
       color: var(--md-sys-color-primary);
+      vertical-align: middle;
     }
   }
 
