@@ -1,0 +1,79 @@
+<div class="otp-container" @fadeInUp>
+  <!-- Logo Section -->
+  <div class="logo-section">
+    <div class="logo-glow"></div>
+    <img src="assets/logo.svg" alt="Nirman Logo" class="logo" />
+    <h1 class="brand-name">Nirman</h1>
+    <p class="tagline">Revolutionize your construction workflow</p>
+  </div>
+
+  <!-- OTP Card -->
+  <div class="otp-card" @slideIn>
+    <div class="lock-icon">
+      <mat-icon>lock</mat-icon>
+    </div>
+
+    <div class="card-header">
+      <h2>Enter Verification Code</h2>
+      <p>We've sent a 6-digit code to your email</p>
+      <p class="email-highlight">{{ email$ | async }}</p>
+    </div>
+
+    <!-- Error Message -->
+    @if (error$ | async; as error) {
+      <div class="error-message">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error }}</span>
+      </div>
+    }
+
+    <!-- OTP Input -->
+    <div class="otp-inputs" (paste)="onPaste($event)">
+      @for (digit of otpDigits; track $index) {
+        <input
+          #otpInput
+          type="text"
+          maxlength="1"
+          class="otp-input"
+          [value]="digit"
+          (input)="onDigitInput($event, $index)"
+          (keydown)="onKeyDown($event, $index)"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          autocomplete="one-time-code"
+        />
+      }
+    </div>
+
+    <!-- Countdown -->
+    <div class="countdown">
+      Code expires in <span class="time">{{ formattedCountdown }}</span>
+    </div>
+
+    <!-- Submit Button -->
+    <button
+      class="submit-btn"
+      [disabled]="!isOtpComplete || (loading$ | async)"
+      (click)="onSubmit()"
+    >
+      @if (loading$ | async) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <mat-icon>check_circle</mat-icon>
+        Signup
+      }
+    </button>
+
+    <!-- Resend Link -->
+    <div class="resend-section">
+      <span>Didn't receive the code?</span>
+      <button
+        class="resend-link"
+        [disabled]="!canResend"
+        (click)="resendCode()"
+      >
+        Resend Code
+      </button>
+    </div>
+  </div>
+</div>

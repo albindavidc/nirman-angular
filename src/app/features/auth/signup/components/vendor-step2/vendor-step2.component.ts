@@ -16,6 +16,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule, MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import * as SignupActions from '../../store/signup.actions';
 import * as SignupSelectors from '../../store/signup.selectors';
 
@@ -32,6 +34,7 @@ import * as SignupSelectors from '../../store/signup.selectors';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatChipsModule,
   ],
   templateUrl: './vendor-step2.component.html',
   styleUrl: './vendor-step2.component.scss',
@@ -65,14 +68,9 @@ export class VendorStep2Component implements OnInit {
   error$: Observable<string | null>;
   userId$: Observable<string | null>;
 
-  businessTypes = [
-    { value: 'general_contractor', label: 'General Contractor' },
-    { value: 'subcontractor', label: 'Subcontractor' },
-    { value: 'supplier', label: 'Material Supplier' },
-    { value: 'equipment_rental', label: 'Equipment Rental' },
-    { value: 'consulting', label: 'Consulting Services' },
-    { value: 'other', label: 'Other' },
-  ];
+  // Chips configuration
+  readonly separatorKeyCodes = [ENTER, COMMA] as const;
+  productsServices: string[] = [];
 
   constructor() {
     this.loading$ = this.store.select(SignupSelectors.selectLoading);
@@ -85,14 +83,27 @@ export class VendorStep2Component implements OnInit {
       companyName: ['', [Validators.required, Validators.minLength(2)]],
       registrationNumber: ['', [Validators.required]],
       taxNumber: [''],
-      businessType: ['', [Validators.required]],
       yearsInBusiness: ['', [Validators.required, Validators.min(0)]],
       addressStreet: [''],
       addressCity: [''],
       addressState: [''],
       addressZipCode: [''],
-      productsServices: [''],
     });
+  }
+
+  addProduct(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.productsServices.push(value);
+    }
+    event.chipInput!.clear();
+  }
+
+  removeProduct(product: string): void {
+    const index = this.productsServices.indexOf(product);
+    if (index >= 0) {
+      this.productsServices.splice(index, 1);
+    }
   }
 
   onSubmit(): void {
@@ -101,12 +112,6 @@ export class VendorStep2Component implements OnInit {
         .subscribe((userId) => {
           if (userId) {
             const formValue = this.form.value;
-            const productsServices = formValue.productsServices
-              ? formValue.productsServices
-                  .split(',')
-                  .map((s: string) => s.trim())
-                  .filter((s: string) => s)
-              : [];
 
             this.store.dispatch(
               SignupActions.submitStep2({
@@ -115,7 +120,6 @@ export class VendorStep2Component implements OnInit {
                   companyName: formValue.companyName,
                   registrationNumber: formValue.registrationNumber,
                   taxNumber: formValue.taxNumber || undefined,
-                  businessType: formValue.businessType,
                   yearsInBusiness: formValue.yearsInBusiness
                     ? parseInt(formValue.yearsInBusiness, 10)
                     : undefined,
@@ -124,7 +128,9 @@ export class VendorStep2Component implements OnInit {
                   addressState: formValue.addressState || undefined,
                   addressZipCode: formValue.addressZipCode || undefined,
                   productsServices:
-                    productsServices.length > 0 ? productsServices : undefined,
+                    this.productsServices.length > 0
+                      ? this.productsServices
+                      : undefined,
                 },
               })
             );

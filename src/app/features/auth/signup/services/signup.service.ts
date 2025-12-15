@@ -8,12 +8,23 @@ import {
   Step2Response,
 } from '../models/signup.models';
 
+interface OtpResponse {
+  message: string;
+  email: string;
+}
+
+interface OtpVerifyResponse {
+  message: string;
+  verified: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class SignupService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:3000/auth/vendor/signup';
+  private readonly otpUrl = 'http://localhost:3000/auth/otp';
 
   submitStep1(data: VendorUserData): Observable<Step1Response> {
     return this.http.post<Step1Response>(`${this.apiUrl}/step1`, {
@@ -39,5 +50,20 @@ export class SignupService {
       addressZipCode: data.addressZipCode,
       productsServices: data.productsServices,
     });
+  }
+
+  sendOtp(email: string): Observable<OtpResponse> {
+    return this.http.post<OtpResponse>(`${this.otpUrl}/send`, { email });
+  }
+
+  verifyOtp(email: string, otp: string): Observable<OtpVerifyResponse> {
+    return this.http.post<OtpVerifyResponse>(`${this.otpUrl}/verify`, {
+      email,
+      otp,
+    });
+  }
+
+  resendOtp(email: string): Observable<OtpResponse> {
+    return this.http.post<OtpResponse>(`${this.otpUrl}/resend`, { email });
   }
 }

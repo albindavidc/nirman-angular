@@ -50,28 +50,13 @@
         </mat-form-field>
       </div>
 
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Business Type</mat-label>
-          <mat-select formControlName="businessType">
-            <mat-option value="" disabled>Select business type</mat-option>
-            @for (type of businessTypes; track type.value) {
-              <mat-option [value]="type.value">{{ type.label }}</mat-option>
-            }
-          </mat-select>
-          @if (form.get('businessType')?.hasError('required') && form.get('businessType')?.touched) {
-            <mat-error>Business type is required</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Years in Business</mat-label>
-          <input matInput type="number" formControlName="yearsInBusiness" placeholder="5" min="0">
-          @if (form.get('yearsInBusiness')?.hasError('required') && form.get('yearsInBusiness')?.touched) {
-            <mat-error>Years in business is required</mat-error>
-          }
-        </mat-form-field>
-      </div>
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Years in Business</mat-label>
+        <input matInput type="number" formControlName="yearsInBusiness" placeholder="5" min="0">
+        @if (form.get('yearsInBusiness')?.hasError('required') && form.get('yearsInBusiness')?.touched) {
+          <mat-error>Years in business is required</mat-error>
+        }
+      </mat-form-field>
 
       <!-- Business Address Section -->
       <div class="section-label">Business Address</div>
@@ -99,13 +84,27 @@
       </div>
 
       <!-- Products/Services -->
-      <div class="section-label">Products/Services Offered (Separated by comma)</div>
+      <div class="section-label">Products/Services Offered</div>
       
-      <mat-form-field appearance="outline" class="form-field full-width">
+      <mat-form-field appearance="outline" class="form-field full-width chips-field">
         <mat-label>Products/Services</mat-label>
-        <textarea matInput formControlName="productsServices" 
-                  placeholder="Describe what your company provides..." 
-                  rows="4"></textarea>
+        <mat-chip-grid #chipGrid aria-label="Products and services">
+          @for (product of productsServices; track product) {
+            <mat-chip-row (removed)="removeProduct(product)">
+              {{ product }}
+              <button matChipRemove aria-label="Remove product">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          }
+        </mat-chip-grid>
+        <input matInput
+               placeholder="Type and press Enter to add..."
+               [matChipInputFor]="chipGrid"
+               [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+               [matChipInputAddOnBlur]="true"
+               (matChipInputTokenEnd)="addProduct($event)">
+        <mat-hint>Press Enter or comma to add a tag</mat-hint>
       </mat-form-field>
 
       <div class="login-link">

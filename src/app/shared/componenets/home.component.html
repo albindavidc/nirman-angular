@@ -146,7 +146,11 @@
       <button class="btn-text" aria-label="Sign in to your account">
         Sign In
       </button>
-      <button class="btn-primary" aria-label="Get started with Nirman">
+      <button
+        class="btn-primary"
+        aria-label="Get started with Nirman"
+        (click)="navigateToSignup()"
+      >
         Get Started
       </button>
     </div>
@@ -165,7 +169,11 @@
         workflows, and complete visibility across all your sites.
       </p>
       <div class="hero-actions">
-        <button class="btn-large" aria-label="Sign up for Nirman">
+        <button
+          class="btn-large"
+          aria-label="Sign up for Nirman"
+          (click)="navigateToSignup()"
+        >
           Signup <span aria-hidden="true">➝</span>
         </button>
       </div>

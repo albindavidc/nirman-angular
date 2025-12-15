@@ -20,9 +20,10 @@ export const signupReducer = createReducer(
     error: null,
   })),
 
-  on(SignupActions.submitStep1Success, (state, { response }) => ({
+  on(SignupActions.submitStep1Success, (state, { response, email }) => ({
     ...state,
     userId: response.userId,
+    email: email,
     currentStep: 2,
     loading: false,
     error: null,
@@ -51,6 +52,59 @@ export const signupReducer = createReducer(
   })),
 
   on(SignupActions.submitStep2Failure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // OTP
+  on(SignupActions.sendOtp, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(SignupActions.sendOtpSuccess, (state) => ({
+    ...state,
+    loading: false,
+  })),
+
+  on(SignupActions.sendOtpFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  on(SignupActions.verifyOtp, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(SignupActions.verifyOtpSuccess, (state) => ({
+    ...state,
+    otpVerified: true,
+    loading: false,
+  })),
+
+  on(SignupActions.verifyOtpFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  on(SignupActions.resendOtp, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(SignupActions.resendOtpSuccess, (state) => ({
+    ...state,
+    loading: false,
+  })),
+
+  on(SignupActions.resendOtpFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,

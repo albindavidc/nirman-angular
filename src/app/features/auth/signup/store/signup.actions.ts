@@ -21,7 +21,7 @@ export const submitStep1 = createAction(
 
 export const submitStep1Success = createAction(
   '[Signup] Submit Step 1 Success',
-  props<{ response: Step1Response }>()
+  props<{ response: Step1Response; email: string }>()
 );
 
 export const submitStep1Failure = createAction(
@@ -42,6 +42,43 @@ export const submitStep2Success = createAction(
 
 export const submitStep2Failure = createAction(
   '[Signup] Submit Step 2 Failure',
+  props<{ error: string }>()
+);
+
+// OTP Actions
+export const sendOtp = createAction(
+  '[Signup] Send OTP',
+  props<{ email: string }>()
+);
+
+export const sendOtpSuccess = createAction('[Signup] Send OTP Success');
+
+export const sendOtpFailure = createAction(
+  '[Signup] Send OTP Failure',
+  props<{ error: string }>()
+);
+
+export const verifyOtp = createAction(
+  '[Signup] Verify OTP',
+  props<{ email: string; otp: string }>()
+);
+
+export const verifyOtpSuccess = createAction('[Signup] Verify OTP Success');
+
+export const verifyOtpFailure = createAction(
+  '[Signup] Verify OTP Failure',
+  props<{ error: string }>()
+);
+
+export const resendOtp = createAction(
+  '[Signup] Resend OTP',
+  props<{ email: string }>()
+);
+
+export const resendOtpSuccess = createAction('[Signup] Resend OTP Success');
+
+export const resendOtpFailure = createAction(
+  '[Signup] Resend OTP Failure',
   props<{ error: string }>()
 );
 

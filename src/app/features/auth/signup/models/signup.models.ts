@@ -16,7 +16,6 @@ export interface VendorCompanyData {
   companyName: string;
   registrationNumber: string;
   taxNumber?: string;
-  businessType?: string;
   yearsInBusiness?: number;
   addressStreet?: string;
   addressCity?: string;

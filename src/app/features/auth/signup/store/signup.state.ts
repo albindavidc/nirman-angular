@@ -10,6 +10,8 @@ export interface SignupState {
   step2Data: VendorCompanyData | null;
   userId: string | null;
   vendorId: string | null;
+  email: string | null;
+  otpVerified: boolean;
   currentStep: number;
   loading: boolean;
   error: string | null;
@@ -21,6 +23,8 @@ export const initialSignupState: SignupState = {
   step2Data: null,
   userId: null,
   vendorId: null,
+  email: null,
+  otpVerified: false,
   currentStep: 0,
   loading: false,
   error: null,

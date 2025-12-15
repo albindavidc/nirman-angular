@@ -33,6 +33,16 @@ export const selectVendorId = createSelector(
   (state) => state.vendorId
 );
 
+export const selectEmail = createSelector(
+  selectSignupState,
+  (state) => state.email
+);
+
+export const selectOtpVerified = createSelector(
+  selectSignupState,
+  (state) => state.otpVerified
+);
+
 export const selectLoading = createSelector(
   selectSignupState,
   (state) => state.loading
