@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import * as SignupActions from '../../store/signup.actions';
 import * as SignupSelectors from '../../store/signup.selectors';
+import { AuthLogoComponent } from '../../../shared/auth-logo/auth-logo.component';
 
 @Component({
   selector: 'app-vendor-step1',
@@ -30,6 +31,7 @@ import * as SignupSelectors from '../../store/signup.selectors';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    AuthLogoComponent,
   ],
   templateUrl: './vendor-step1.component.html',
   styleUrl: './vendor-step1.component.scss',

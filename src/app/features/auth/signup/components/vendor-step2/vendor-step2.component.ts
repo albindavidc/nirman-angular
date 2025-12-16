@@ -20,6 +20,7 @@ import { MatChipsModule, MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import * as SignupActions from '../../store/signup.actions';
 import * as SignupSelectors from '../../store/signup.selectors';
+import { AuthLogoComponent } from '../../../shared/auth-logo/auth-logo.component';
 
 @Component({
   selector: 'app-vendor-step2',
@@ -35,6 +36,7 @@ import * as SignupSelectors from '../../store/signup.selectors';
     MatIconModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    AuthLogoComponent,
   ],
   templateUrl: './vendor-step2.component.html',
   styleUrl: './vendor-step2.component.scss',

@@ -38,7 +38,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -60%);
     width: 200px;
     height: 200px;
     background: radial-gradient(
@@ -50,13 +50,29 @@
     pointer-events: none;
   }
 
-  .logo {
-    width: 80px;
-    height: 80px;
-    color: var(--md-sys-color-primary);
-    filter: drop-shadow(0 0 20px rgba(233, 193, 108, 0.3));
+  .logo-container {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(
+      145deg,
+      rgba(60, 60, 60, 0.9) 0%,
+      rgba(40, 40, 40, 0.95) 100%
+    );
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     z-index: 1;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
+    filter: brightness(0) invert(0.85);
   }
 
   .brand-name {
@@ -64,7 +80,7 @@
     font-size: 2rem;
     font-weight: 600;
     color: var(--md-sys-color-primary);
-    margin: 12px 0 4px;
+    margin: 16px 0 4px;
     letter-spacing: 0.02em;
   }
 
@@ -172,8 +188,38 @@
   &.full-width {
     margin-bottom: 8px;
   }
+}
 
-  ::ng-deep {
+// Material Form Field Dark Theme Overrides
+:host ::ng-deep {
+  .mat-mdc-form-field {
+    .mat-mdc-input-element,
+    .mat-mdc-select-value {
+      color: var(--md-sys-color-on-surface) !important;
+    }
+
+    .mat-mdc-input-element {
+      caret-color: var(--md-sys-color-primary);
+    }
+
+    .mdc-floating-label {
+      color: var(--md-sys-color-on-surface-variant) !important;
+    }
+
+    .mdc-floating-label--float-above {
+      color: var(--md-sys-color-primary) !important;
+    }
+
+    .mat-mdc-input-element::placeholder {
+      color: transparent !important;
+      transition: color 0.2s ease;
+    }
+
+    &.mat-focused .mat-mdc-input-element::placeholder {
+      color: var(--md-sys-color-on-surface-variant) !important;
+      opacity: 0.5;
+    }
+
     .mat-mdc-form-field-subscript-wrapper {
       height: 20px;
     }
@@ -184,16 +230,19 @@
 
       .mdc-notched-outline__leading {
         border-radius: 16px 0 0 16px !important;
-        border-color: var(--md-sys-color-outline-variant);
+        border-color: var(--md-sys-color-outline-variant) !important;
+        border-width: 1px;
       }
 
       .mdc-notched-outline__notch {
-        border-color: var(--md-sys-color-outline-variant);
+        border-color: var(--md-sys-color-outline-variant) !important;
+        border-width: 1px;
       }
 
       .mdc-notched-outline__trailing {
         border-radius: 0 16px 16px 0 !important;
-        border-color: var(--md-sys-color-outline-variant);
+        border-color: var(--md-sys-color-outline-variant) !important;
+        border-width: 1px;
       }
     }
 
@@ -202,31 +251,13 @@
       .mdc-notched-outline__notch,
       .mdc-notched-outline__trailing {
         border-color: var(--md-sys-color-primary) !important;
-        border-width: 2px;
+        border-width: 2px !important;
       }
     }
 
     .mat-mdc-form-field-hint {
       color: var(--md-sys-color-on-surface-variant);
       font-size: 0.75rem;
-    }
-
-    .mdc-floating-label {
-      color: var(--md-sys-color-on-surface-variant);
-    }
-
-    .mdc-floating-label--float-above {
-      color: var(--md-sys-color-primary);
-    }
-
-    .mat-mdc-input-element,
-    .mat-mdc-select-value {
-      color: var(--md-sys-color-on-surface);
-    }
-
-    .mat-mdc-input-element::placeholder {
-      color: var(--md-sys-color-on-surface-variant);
-      opacity: 0.6;
     }
 
     .mat-mdc-select-arrow {

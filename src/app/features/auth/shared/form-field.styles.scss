@@ -1,0 +1,145 @@
+// Shared form field styles for Material components on dark theme
+// Usage: @import '../../shared/form-field.styles.scss';
+
+@mixin material-form-field-dark-theme {
+  :host ::ng-deep {
+    // Form field container
+    .mat-mdc-form-field {
+      width: 100%;
+
+      // Input text color - white for dark background
+      .mat-mdc-input-element,
+      .mat-mdc-select-value,
+      input.mat-mdc-input-element {
+        color: var(--md-sys-color-on-surface) !important;
+        caret-color: var(--md-sys-color-primary);
+      }
+
+      // Label styles
+      .mdc-floating-label,
+      .mat-mdc-floating-label {
+        color: var(--md-sys-color-on-surface-variant) !important;
+      }
+
+      // Floating label when focused or with value
+      .mdc-floating-label--float-above {
+        color: var(--md-sys-color-primary) !important;
+      }
+
+      // Placeholder - hidden by default, shows on focus
+      .mat-mdc-input-element::placeholder {
+        color: transparent !important;
+        transition: color 0.2s ease;
+      }
+
+      &.mat-focused .mat-mdc-input-element::placeholder {
+        color: var(--md-sys-color-on-surface-variant) !important;
+        opacity: 0.5;
+      }
+
+      // Outlined form field styles
+      .mdc-text-field--outlined {
+        background: var(--md-sys-color-surface-container);
+        border-radius: 12px;
+
+        // Default border
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: var(--md-sys-color-outline-variant) !important;
+          border-width: 1px;
+        }
+
+        .mdc-notched-outline__leading {
+          border-radius: 12px 0 0 12px !important;
+        }
+
+        .mdc-notched-outline__trailing {
+          border-radius: 0 12px 12px 0 !important;
+        }
+      }
+
+      // Focused state - primary color highlight
+      .mdc-text-field--focused {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: var(--md-sys-color-primary) !important;
+          border-width: 2px !important;
+        }
+      }
+
+      // Hint text
+      .mat-mdc-form-field-hint {
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 0.75rem;
+      }
+
+      // Error text
+      .mat-mdc-form-field-error {
+        color: var(--md-sys-color-error);
+      }
+
+      // Subscript wrapper spacing
+      .mat-mdc-form-field-subscript-wrapper {
+        height: 20px;
+      }
+
+      // Icon prefix/suffix colors
+      .mat-mdc-form-field-icon-prefix,
+      .mat-mdc-form-field-icon-suffix {
+        .mat-icon,
+        .mat-mdc-icon-button {
+          color: var(--md-sys-color-on-surface-variant);
+        }
+      }
+    }
+
+    // Select dropdown
+    .mat-mdc-select {
+      color: var(--md-sys-color-on-surface);
+
+      .mat-mdc-select-arrow {
+        color: var(--md-sys-color-primary);
+      }
+    }
+
+    // Checkbox styles
+    .mat-mdc-checkbox {
+      .mdc-checkbox__background {
+        border-color: var(--md-sys-color-outline) !important;
+      }
+
+      .mdc-checkbox--selected .mdc-checkbox__background {
+        background-color: var(--md-sys-color-primary) !important;
+        border-color: var(--md-sys-color-primary) !important;
+      }
+
+      .mdc-form-field {
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 0.875rem;
+      }
+    }
+
+    // Chip styles
+    .mat-mdc-chip-row,
+    .mat-mdc-chip {
+      background: var(--md-sys-color-primary-container) !important;
+      color: var(--md-sys-color-on-primary-container) !important;
+      border-radius: 12px;
+
+      .mdc-evolution-chip__text-label {
+        color: var(--md-sys-color-on-primary-container) !important;
+      }
+
+      .mat-mdc-chip-remove {
+        color: var(--md-sys-color-on-primary-container) !important;
+        opacity: 0.8;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

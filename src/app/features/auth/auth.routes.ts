@@ -6,5 +6,11 @@ export const AUTH_ROUTES: Routes = [
     loadChildren: () =>
       import('./signup/signup.routes').then((m) => m.SIGNUP_ROUTES),
   },
-  // Future routes: login, forgot-password, etc.
+  {
+    path: 'login',
+    loadChildren: () =>
+      import('./login/login.routes').then((m) => m.LOGIN_ROUTES),
+  },
+  // Redirect empty path to login
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
