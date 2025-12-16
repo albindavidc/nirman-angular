@@ -24,6 +24,20 @@ export class LoginService {
     });
   }
 
+  logout(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/logout`, {});
+  }
+
+  refreshToken(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/refresh`, {});
+  }
+
+  getMe(): Observable<{ id: string; email: string; role: string }> {
+    return this.http.get<{ id: string; email: string; role: string }>(
+      `${this.apiUrl}/me`
+    );
+  }
+
   forgotPassword(email: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
       `${this.apiUrl}/forgot-password`,

@@ -17,7 +17,10 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { routes } from './app.routes';
 import { signupReducer } from './features/auth/signup/store/signup.reducer';
 import { SignupEffects } from './features/auth/signup/store/signup.effects';
+import { loginReducer } from './features/auth/login/store/login.reducer';
+import { LoginEffects } from './features/auth/login/store/login.effects';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { authInitializerProvider } from './core/initializers/auth.initializer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,8 +28,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideAnimations(),
-    provideStore({ signup: signupReducer }),
-    provideEffects([SignupEffects]),
+    provideStore({
+      signup: signupReducer,
+      login: loginReducer,
+    }),
+    provideEffects([SignupEffects, LoginEffects]),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
@@ -34,5 +40,6 @@ export const appConfig: ApplicationConfig = {
       trace: false,
       traceLimit: 75,
     }),
+    authInitializerProvider,
   ],
 };

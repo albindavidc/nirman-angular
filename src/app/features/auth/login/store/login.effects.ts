@@ -35,11 +35,40 @@ export class LoginEffects {
       this.actions$.pipe(
         ofType(LoginActions.loginSuccess),
         tap(({ response }) => {
-          // Store token in localStorage
-          localStorage.setItem('accessToken', response.accessToken);
+          // Store user in localStorage for persistence on page refresh
+          // Note: Token is stored in HTTP-only cookie by the server
           localStorage.setItem('user', JSON.stringify(response.user));
           // Navigate to home/dashboard
           this.router.navigate(['/']);
+        })
+      ),
+    { dispatch: false }
+  );
+
+  // Validate session with backend after hydrating from localStorage
+  validateSession$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LoginActions.validateSession),
+      exhaustMap(() =>
+        this.loginService.getMe().pipe(
+          map((user) => LoginActions.validateSessionSuccess({ user })),
+          catchError(() => of(LoginActions.validateSessionFailure()))
+        )
+      )
+    )
+  );
+
+  // On validation failure, clear user and redirect to login
+  validateSessionFailure$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(LoginActions.validateSessionFailure),
+        tap(() => {
+          localStorage.removeItem('user');
+          // Don't redirect if already on auth pages
+          if (!this.router.url.includes('/auth')) {
+            this.router.navigate(['/auth/login']);
+          }
         })
       ),
     { dispatch: false }
@@ -154,11 +183,20 @@ export class LoginEffects {
     () =>
       this.actions$.pipe(
         ofType(LoginActions.logout),
-        tap(() => {
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('user');
-          this.router.navigate(['/auth/login']);
-        })
+        exhaustMap(() =>
+          this.loginService.logout().pipe(
+            tap(() => {
+              localStorage.removeItem('user');
+              this.router.navigate(['/auth/login']);
+            }),
+            catchError(() => {
+              // Even if API fails, clear local data
+              localStorage.removeItem('user');
+              this.router.navigate(['/auth/login']);
+              return of(null);
+            })
+          )
+        )
       ),
     { dispatch: false }
   );

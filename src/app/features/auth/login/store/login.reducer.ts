@@ -27,6 +27,31 @@ export const loginReducer = createReducer(
     error,
   })),
 
+  // Hydrate from localStorage on app init
+  on(LoginActions.hydrateFromStorage, (state, { user }) => ({
+    ...state,
+    isLoggedIn: true,
+    user,
+  })),
+
+  // Session validation from backend
+  on(LoginActions.validateSessionSuccess, (state, { user }) => ({
+    ...state,
+    isLoggedIn: true,
+    user: {
+      ...state.user,
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    } as typeof state.user,
+  })),
+
+  on(LoginActions.validateSessionFailure, (state) => ({
+    ...state,
+    isLoggedIn: false,
+    user: null,
+  })),
+
   // Forgot Password
   on(LoginActions.forgotPassword, (state, { email }) => ({
     ...state,

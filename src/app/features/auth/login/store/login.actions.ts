@@ -21,6 +21,24 @@ export const loginFailure = createAction(
   props<{ error: string }>()
 );
 
+// Hydrate user from localStorage on app init
+export const hydrateFromStorage = createAction(
+  '[Login] Hydrate From Storage',
+  props<{ user: LoginResponse['user'] }>()
+);
+
+// Validate session with backend after hydrating
+export const validateSession = createAction('[Login] Validate Session');
+
+export const validateSessionSuccess = createAction(
+  '[Login] Validate Session Success',
+  props<{ user: { id: string; email: string; role: string } }>()
+);
+
+export const validateSessionFailure = createAction(
+  '[Login] Validate Session Failure'
+);
+
 // Forgot Password Actions
 export const forgotPassword = createAction(
   '[Login] Forgot Password',
