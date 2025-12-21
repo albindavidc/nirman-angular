@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { RoleGuard } from '../../../core/guards/role.guard';
 
 export const dashboardRoutes: Routes = [
   {
@@ -8,16 +9,22 @@ export const dashboardRoutes: Routes = [
   },
   {
     path: 'supervisor',
+    canActivate: [RoleGuard],
+    data: { roles: ['supervisor'] },
     loadComponent: () =>
       import('./dashboard.component').then((m) => m.DashboardComponent),
   },
   {
     path: 'vendor',
+    canActivate: [RoleGuard],
+    data: { roles: ['vendor'] },
     loadComponent: () =>
       import('./dashboard.component').then((m) => m.DashboardComponent),
   },
   {
     path: 'worker',
+    canActivate: [RoleGuard],
+    data: { roles: ['worker'] },
     loadComponent: () =>
       import('./dashboard.component').then((m) => m.DashboardComponent),
   },

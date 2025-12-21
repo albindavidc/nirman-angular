@@ -3,10 +3,13 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { vendorReducer } from './store/vendor.reducer';
 import { VendorEffects } from './store/vendor.effects';
+import { RoleGuard } from '../../core/guards/role.guard';
 
 export const vendorManagementRoutes: Routes = [
   {
     path: '',
+    canActivate: [RoleGuard],
+    data: { roles: ['admin'] },
     loadComponent: () =>
       import('./components/vendor-list/vendor-list.component').then(
         (m) => m.VendorListComponent
