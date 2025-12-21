@@ -3,12 +3,14 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, exhaustMap, catchError } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import * as SettingsActions from './settings.actions';
 
 @Injectable()
 export class SettingsEffects {
   private readonly actions$ = inject(Actions);
   private readonly settingsService = inject(SettingsService);
+  private readonly notification = inject(NotificationService);
 
   loadProfile$ = createEffect(() =>
     this.actions$.pipe(
@@ -33,14 +35,20 @@ export class SettingsEffects {
       ofType(SettingsActions.updateProfile),
       exhaustMap(({ data }) =>
         this.settingsService.updateProfile(data).pipe(
-          map((profile) => SettingsActions.updateProfileSuccess({ profile })),
-          catchError((error) =>
-            of(
+          map((profile) => {
+            this.notification.success('Profile updated successfully');
+            return SettingsActions.updateProfileSuccess({ profile });
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to update profile'
+            );
+            return of(
               SettingsActions.updateProfileFailure({
                 error: error.error?.message || 'Failed to update profile',
               })
-            )
-          )
+            );
+          })
         )
       )
     )
@@ -51,14 +59,20 @@ export class SettingsEffects {
       ofType(SettingsActions.updatePassword),
       exhaustMap(({ data }) =>
         this.settingsService.updatePassword(data).pipe(
-          map(() => SettingsActions.updatePasswordSuccess()),
-          catchError((error) =>
-            of(
+          map(() => {
+            this.notification.success('Password updated successfully');
+            return SettingsActions.updatePasswordSuccess();
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to update password'
+            );
+            return of(
               SettingsActions.updatePasswordFailure({
                 error: error.error?.message || 'Failed to update password',
               })
-            )
-          )
+            );
+          })
         )
       )
     )

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { map, exhaustMap, catchError, tap } from 'rxjs/operators';
 import { LoginService } from '../services/login.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import * as LoginActions from './login.actions';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class LoginEffects {
   private readonly actions$ = inject(Actions);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
+  private readonly notification = inject(NotificationService);
 
   login$ = createEffect(() =>
     this.actions$.pipe(
@@ -35,6 +37,7 @@ export class LoginEffects {
       this.actions$.pipe(
         ofType(LoginActions.loginSuccess),
         tap(({ response }) => {
+          this.notification.success('Login successful');
           // Store user in localStorage for persistence on page refresh
           // Note: Token is stored in HTTP-only cookie by the server
           localStorage.setItem('user', JSON.stringify(response.user));
@@ -117,6 +120,7 @@ export class LoginEffects {
       this.actions$.pipe(
         ofType(LoginActions.forgotPasswordSuccess),
         tap(() => {
+          this.notification.success('Reset code sent to your email');
           this.router.navigate(['/auth/login/verify-reset-otp']);
         })
       ),
@@ -157,7 +161,10 @@ export class LoginEffects {
       ofType(LoginActions.resendResetOtp),
       exhaustMap(({ email }) =>
         this.loginService.resendResetOtp(email).pipe(
-          map(() => LoginActions.resendResetOtpSuccess()),
+          map(() => {
+            this.notification.success('Code resent successfully');
+            return LoginActions.resendResetOtpSuccess();
+          }),
           catchError((error) =>
             of(
               LoginActions.resendResetOtpFailure({
@@ -193,6 +200,7 @@ export class LoginEffects {
       this.actions$.pipe(
         ofType(LoginActions.resetPasswordSuccess),
         tap(() => {
+          this.notification.success('Password reset successfully');
           this.router.navigate(['/auth/login']);
         })
       ),
@@ -207,6 +215,7 @@ export class LoginEffects {
           this.loginService.logout().pipe(
             tap(() => {
               localStorage.removeItem('user');
+              this.notification.success('Logged out successfully');
               this.router.navigate(['/auth/login']);
             }),
             catchError(() => {

@@ -84,3 +84,24 @@ body {
 .cdk-overlay-dark-backdrop {
   background: rgba(0, 0, 0, 0.6);
 }
+
+// Snackbar variants
+.snackbar-success {
+  --mdc-snackbar-container-color: #2e7d32;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+}
+
+.snackbar-error {
+  --mdc-snackbar-container-color: #c62828;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+}
+
+.snackbar-info {
+  --mdc-snackbar-container-color: #0277bd;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+}
+
+.snackbar-warn {
+  --mdc-snackbar-container-color: #f9a825;
+  --mdc-snackbar-supporting-text-color: #000000;
+}

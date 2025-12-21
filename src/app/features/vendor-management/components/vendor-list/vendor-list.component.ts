@@ -26,6 +26,10 @@ import { Vendor } from '../../models/vendor.models';
 import { VendorEditModalComponent } from '../vendor-edit-modal/vendor-edit-modal.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn } from '../../../../shared/components/table/table.models';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-vendor-list',
@@ -158,15 +162,57 @@ export class VendorListComponent implements OnInit {
   }
 
   approveVendor(vendor: Vendor): void {
-    this.store.dispatch(VendorActions.approveVendor({ id: vendor.id }));
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Approve Vendor',
+        message: `Are you sure you want to approve ${vendor.companyName}?`,
+        confirmButtonText: 'Approve',
+        confirmButtonColor: 'primary',
+      } as ConfirmDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.store.dispatch(VendorActions.approveVendor({ id: vendor.id }));
+      }
+    });
   }
 
   rejectVendor(vendor: Vendor): void {
-    this.store.dispatch(VendorActions.rejectVendor({ id: vendor.id }));
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Reject Vendor',
+        message: `Are you sure you want to reject ${vendor.companyName}?`,
+        confirmButtonText: 'Reject',
+        confirmButtonColor: 'warn',
+      } as ConfirmDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.store.dispatch(VendorActions.rejectVendor({ id: vendor.id }));
+      }
+    });
   }
 
   blacklistVendor(vendor: Vendor): void {
-    this.store.dispatch(VendorActions.blacklistVendor({ id: vendor.id }));
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Blacklist Vendor',
+        message: `Are you sure you want to blacklist ${vendor.companyName}? This action is serious.`,
+        confirmButtonText: 'Blacklist',
+        confirmButtonColor: 'warn',
+      } as ConfirmDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.store.dispatch(VendorActions.blacklistVendor({ id: vendor.id }));
+      }
+    });
   }
 
   getStatusClass(status: string): string {

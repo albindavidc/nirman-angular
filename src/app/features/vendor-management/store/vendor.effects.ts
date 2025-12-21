@@ -1,14 +1,16 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, exhaustMap, catchError, switchMap } from 'rxjs/operators';
+import { map, exhaustMap, catchError, switchMap, tap } from 'rxjs/operators';
 import { VendorService } from '../services/vendor.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import * as VendorActions from './vendor.actions';
 
 @Injectable()
 export class VendorEffects {
   private readonly actions$ = inject(Actions);
   private readonly vendorService = inject(VendorService);
+  private readonly notification = inject(NotificationService);
 
   loadVendors$ = createEffect(() =>
     this.actions$.pipe(
@@ -56,14 +58,20 @@ export class VendorEffects {
       ofType(VendorActions.updateVendor),
       exhaustMap(({ id, data }) =>
         this.vendorService.updateVendor(id, data).pipe(
-          map((vendor) => VendorActions.updateVendorSuccess({ vendor })),
-          catchError((error) =>
-            of(
+          map((vendor) => {
+            this.notification.success('Vendor updated successfully');
+            return VendorActions.updateVendorSuccess({ vendor });
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to update vendor'
+            );
+            return of(
               VendorActions.updateVendorFailure({
                 error: error.error?.message || 'Failed to update vendor',
               })
-            )
-          )
+            );
+          })
         )
       )
     )
@@ -74,17 +82,22 @@ export class VendorEffects {
       ofType(VendorActions.createVendor),
       exhaustMap(({ data }) =>
         this.vendorService.createVendor(data).pipe(
-          map(
-            (response: any) =>
-              VendorActions.createVendorSuccess({ vendor: response.vendor }) // Backend returns { user, vendor }
-          ),
-          catchError((error) =>
-            of(
+          map((response: any) => {
+            this.notification.success('Vendor created successfully');
+            return VendorActions.createVendorSuccess({
+              vendor: response.vendor,
+            });
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to create vendor'
+            );
+            return of(
               VendorActions.createVendorFailure({
                 error: error.error?.message || 'Failed to create vendor',
               })
-            )
-          )
+            );
+          })
         )
       )
     )
@@ -95,14 +108,20 @@ export class VendorEffects {
       ofType(VendorActions.approveVendor),
       exhaustMap(({ id }) =>
         this.vendorService.approveVendor(id).pipe(
-          map((vendor) => VendorActions.updateVendorSuccess({ vendor })),
-          catchError((error) =>
-            of(
+          map((vendor) => {
+            this.notification.success('Vendor approved successfully');
+            return VendorActions.updateVendorSuccess({ vendor });
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to approve vendor'
+            );
+            return of(
               VendorActions.updateVendorFailure({
                 error: error.error?.message || 'Failed to approve vendor',
               })
-            )
-          )
+            );
+          })
         )
       )
     )
@@ -113,14 +132,20 @@ export class VendorEffects {
       ofType(VendorActions.rejectVendor),
       exhaustMap(({ id }) =>
         this.vendorService.rejectVendor(id).pipe(
-          map((vendor) => VendorActions.updateVendorSuccess({ vendor })),
-          catchError((error) =>
-            of(
+          map((vendor) => {
+            this.notification.success('Vendor rejected');
+            return VendorActions.updateVendorSuccess({ vendor });
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to reject vendor'
+            );
+            return of(
               VendorActions.updateVendorFailure({
                 error: error.error?.message || 'Failed to reject vendor',
               })
-            )
-          )
+            );
+          })
         )
       )
     )
@@ -131,14 +156,20 @@ export class VendorEffects {
       ofType(VendorActions.blacklistVendor),
       exhaustMap(({ id }) =>
         this.vendorService.blacklistVendor(id).pipe(
-          map((vendor) => VendorActions.updateVendorSuccess({ vendor })),
-          catchError((error) =>
-            of(
+          map((vendor) => {
+            this.notification.success('Vendor blacklisted');
+            return VendorActions.updateVendorSuccess({ vendor });
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to blacklist vendor'
+            );
+            return of(
               VendorActions.updateVendorFailure({
                 error: error.error?.message || 'Failed to blacklist vendor',
               })
-            )
-          )
+            );
+          })
         )
       )
     )

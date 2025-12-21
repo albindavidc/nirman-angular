@@ -20,6 +20,10 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn } from '../../../../shared/components/table/table.models';
 import { PageEvent } from '@angular/material/paginator';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-member-list',
@@ -141,12 +145,38 @@ export class MemberListComponent implements OnInit {
   }
 
   blockMember(member: Member) {
-    if (confirm(`Are you sure you want to block ${member.firstName}?`)) {
-      this.store.dispatch(MemberActions.blockMember({ id: member.id }));
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Block Member',
+        message: `Are you sure you want to block ${member.firstName}?`,
+        confirmButtonText: 'Block',
+        confirmButtonColor: 'warn',
+      } as ConfirmDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.store.dispatch(MemberActions.blockMember({ id: member.id }));
+      }
+    });
   }
 
   unblockMember(member: Member) {
-    this.store.dispatch(MemberActions.unblockMember({ id: member.id }));
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Unblock Member',
+        message: `Are you sure you want to unblock ${member.firstName}?`,
+        confirmButtonText: 'Unblock',
+        confirmButtonColor: 'primary',
+      } as ConfirmDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.store.dispatch(MemberActions.unblockMember({ id: member.id }));
+      }
+    });
   }
 }

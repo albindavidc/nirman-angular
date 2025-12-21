@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { map, exhaustMap, catchError, tap, switchMap } from 'rxjs/operators';
 import { SignupService } from '../services/signup.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import * as SignupActions from './signup.actions';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class SignupEffects {
   private readonly actions$ = inject(Actions);
   private readonly signupService = inject(SignupService);
   private readonly router = inject(Router);
+  private readonly notification = inject(NotificationService);
 
   submitStep1$ = createEffect(() =>
     this.actions$.pipe(
@@ -92,14 +94,20 @@ export class SignupEffects {
       ofType(SignupActions.sendOtp),
       exhaustMap(({ email }) =>
         this.signupService.sendOtp(email).pipe(
-          map(() => SignupActions.sendOtpSuccess()),
-          catchError((error) =>
-            of(
+          map(() => {
+            this.notification.success('Verification code sent to your email');
+            return SignupActions.sendOtpSuccess();
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to send OTP'
+            );
+            return of(
               SignupActions.sendOtpFailure({
                 error: error.error?.message || 'Failed to send OTP',
               })
-            )
-          )
+            );
+          })
         )
       )
     )
@@ -128,6 +136,7 @@ export class SignupEffects {
       this.actions$.pipe(
         ofType(SignupActions.verifyOtpSuccess),
         tap(() => {
+          this.notification.success('Email verified successfully');
           this.router.navigate(['/auth/signup/vendor/success']);
         })
       ),
@@ -139,14 +148,20 @@ export class SignupEffects {
       ofType(SignupActions.resendOtp),
       exhaustMap(({ email }) =>
         this.signupService.resendOtp(email).pipe(
-          map(() => SignupActions.resendOtpSuccess()),
-          catchError((error) =>
-            of(
+          map(() => {
+            this.notification.success('Verification code resent');
+            return SignupActions.resendOtpSuccess();
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to resend OTP'
+            );
+            return of(
               SignupActions.resendOtpFailure({
                 error: error.error?.message || 'Failed to resend OTP',
               })
-            )
-          )
+            );
+          })
         )
       )
     )
