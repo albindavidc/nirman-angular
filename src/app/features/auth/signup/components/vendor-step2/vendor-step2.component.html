@@ -8,15 +8,15 @@
       <h2>Company Information</h2>
       <p>Complete this section with company information</p>
     </div>
-    
+
     <div class="divider"></div>
 
     <!-- Error Message -->
     @if (error$ | async; as error) {
-      <div class="error-message">
-        <mat-icon>error_outline</mat-icon>
-        <span>{{ error }}</span>
-      </div>
+    <div class="error-message">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+    </div>
     }
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -25,9 +25,14 @@
         <label class="field-label">Company Name</label>
         <mat-form-field appearance="outline">
           <mat-icon matPrefix>business</mat-icon>
-          <input matInput formControlName="companyName" placeholder="Your Company Inc." />
-          @if (form.get('companyName')?.hasError('required') && form.get('companyName')?.touched) {
-            <mat-error>Company name is required</mat-error>
+          <input
+            matInput
+            formControlName="companyName"
+            placeholder="Your Company Inc."
+          />
+          @if (form.get('companyName')?.hasError('required') &&
+          form.get('companyName')?.touched) {
+          <mat-error>Company name is required</mat-error>
           }
         </mat-form-field>
       </div>
@@ -38,9 +43,14 @@
           <label class="field-label">Company Registration Number</label>
           <mat-form-field appearance="outline">
             <mat-icon matPrefix>badge</mat-icon>
-            <input matInput formControlName="registrationNumber" placeholder="REG-12345" />
-            @if (form.get('registrationNumber')?.hasError('required') && form.get('registrationNumber')?.touched) {
-              <mat-error>Registration number is required</mat-error>
+            <input
+              matInput
+              formControlName="registrationNumber"
+              placeholder="REG-12345"
+            />
+            @if (form.get('registrationNumber')?.hasError('required') &&
+            form.get('registrationNumber')?.touched) {
+            <mat-error>Registration number is required</mat-error>
             }
           </mat-form-field>
         </div>
@@ -50,7 +60,11 @@
           <label class="field-label">Tax Number</label>
           <mat-form-field appearance="outline">
             <mat-icon matPrefix>receipt_long</mat-icon>
-            <input matInput formControlName="taxNumber" placeholder="XX-XXXXXXX" />
+            <input
+              matInput
+              formControlName="taxNumber"
+              placeholder="XX-XXXXXXX"
+            />
           </mat-form-field>
           <p class="field-hint">Employer Identification Number</p>
         </div>
@@ -61,9 +75,16 @@
         <label class="field-label">Years in Business</label>
         <mat-form-field appearance="outline">
           <mat-icon matPrefix>schedule</mat-icon>
-          <input matInput type="number" formControlName="yearsInBusiness" placeholder="5" min="0" />
-          @if (form.get('yearsInBusiness')?.hasError('required') && form.get('yearsInBusiness')?.touched) {
-            <mat-error>Years in business is required</mat-error>
+          <input
+            matInput
+            type="number"
+            formControlName="yearsInBusiness"
+            placeholder="5"
+            min="0"
+          />
+          @if (form.get('yearsInBusiness')?.hasError('required') &&
+          form.get('yearsInBusiness')?.touched) {
+          <mat-error>Years in business is required</mat-error>
           }
         </mat-form-field>
       </div>
@@ -76,11 +97,15 @@
         <label class="field-label">Street Address</label>
         <mat-form-field appearance="outline">
           <mat-icon matPrefix>location_on</mat-icon>
-          <input matInput formControlName="addressStreet" placeholder="Street address" />
+          <input
+            matInput
+            formControlName="addressStreet"
+            placeholder="Street address"
+          />
         </mat-form-field>
       </div>
 
-      <div class="form-row-three">
+      <div class="form-row">
         <!-- City -->
         <div class="form-field">
           <label class="field-label">City</label>
@@ -95,18 +120,26 @@
           <label class="field-label">State</label>
           <mat-form-field appearance="outline">
             <mat-icon matPrefix>map</mat-icon>
-            <input matInput formControlName="addressState" placeholder="State" />
+            <input
+              matInput
+              formControlName="addressState"
+              placeholder="State"
+            />
           </mat-form-field>
         </div>
+      </div>
 
-        <!-- ZIP Code -->
-        <div class="form-field">
-          <label class="field-label">ZIP Code</label>
-          <mat-form-field appearance="outline">
-            <mat-icon matPrefix>pin</mat-icon>
-            <input matInput formControlName="addressZipCode" placeholder="ZIP Code" />
-          </mat-form-field>
-        </div>
+      <!-- ZIP Code -->
+      <div class="form-field full-width">
+        <label class="field-label">ZIP Code</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>pin</mat-icon>
+          <input
+            matInput
+            formControlName="addressZipCode"
+            placeholder="ZIP Code"
+          />
+        </mat-form-field>
       </div>
 
       <!-- Products/Services -->
@@ -118,12 +151,12 @@
           <mat-icon matPrefix>inventory_2</mat-icon>
           <mat-chip-grid #chipGrid aria-label="Products and services">
             @for (product of productsServices; track product) {
-              <mat-chip-row (removed)="removeProduct(product)">
-                {{ product }}
-                <button matChipRemove aria-label="Remove product">
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip-row>
+            <mat-chip-row (removed)="removeProduct(product)">
+              {{ product }}
+              <button matChipRemove aria-label="Remove product">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
             }
           </mat-chip-grid>
           <input
@@ -144,12 +177,15 @@
       </div>
 
       <div class="form-actions">
-        <button mat-flat-button type="submit" class="submit-btn" [disabled]="loading$ | async">
+        <button
+          mat-flat-button
+          type="submit"
+          class="submit-btn"
+          [disabled]="loading$ | async"
+        >
           @if (loading$ | async) {
-            <mat-spinner diameter="20"></mat-spinner>
-          } @else {
-            Send Verification Code
-          }
+          <mat-spinner diameter="20"></mat-spinner>
+          } @else { Send Verification Code }
         </button>
       </div>
     </form>

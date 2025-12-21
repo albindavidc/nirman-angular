@@ -1,5 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
-import { SignupState, initialSignupState } from './signup.state';
+import {
+  SignupState,
+  initialSignupState,
+  persistSignupState,
+  clearPersistedSignupState,
+} from './signup.state';
 import * as SignupActions from './signup.actions';
 
 export const signupReducer = createReducer(
@@ -20,14 +25,23 @@ export const signupReducer = createReducer(
     error: null,
   })),
 
-  on(SignupActions.submitStep1Success, (state, { response, email }) => ({
-    ...state,
-    userId: response.userId,
-    email: email,
-    currentStep: 2,
-    loading: false,
-    error: null,
-  })),
+  on(SignupActions.submitStep1Success, (state, { response, email }) => {
+    const newState = {
+      ...state,
+      userId: response.userId,
+      email: email,
+      currentStep: 2,
+      loading: false,
+      error: null,
+    };
+    // Persist userId, email, and step to localStorage
+    persistSignupState({
+      userId: newState.userId,
+      email: newState.email,
+      currentStep: newState.currentStep,
+    });
+    return newState;
+  }),
 
   on(SignupActions.submitStep1Failure, (state, { error }) => ({
     ...state,
@@ -43,13 +57,23 @@ export const signupReducer = createReducer(
     error: null,
   })),
 
-  on(SignupActions.submitStep2Success, (state, { response }) => ({
-    ...state,
-    vendorId: response.vendorId,
-    currentStep: 3,
-    loading: false,
-    error: null,
-  })),
+  on(SignupActions.submitStep2Success, (state, { response }) => {
+    const newState = {
+      ...state,
+      vendorId: response.vendorId,
+      currentStep: 3,
+      loading: false,
+      error: null,
+    };
+    // Persist vendorId and step to localStorage
+    persistSignupState({
+      userId: newState.userId,
+      vendorId: newState.vendorId,
+      email: newState.email,
+      currentStep: newState.currentStep,
+    });
+    return newState;
+  }),
 
   on(SignupActions.submitStep2Failure, (state, { error }) => ({
     ...state,
@@ -81,11 +105,15 @@ export const signupReducer = createReducer(
     error: null,
   })),
 
-  on(SignupActions.verifyOtpSuccess, (state) => ({
-    ...state,
-    otpVerified: true,
-    loading: false,
-  })),
+  on(SignupActions.verifyOtpSuccess, (state) => {
+    // Clear persisted state after successful verification
+    clearPersistedSignupState();
+    return {
+      ...state,
+      otpVerified: true,
+      loading: false,
+    };
+  }),
 
   on(SignupActions.verifyOtpFailure, (state, { error }) => ({
     ...state,
@@ -111,7 +139,11 @@ export const signupReducer = createReducer(
   })),
 
   // Reset
-  on(SignupActions.resetSignup, () => initialSignupState),
+  on(SignupActions.resetSignup, () => {
+    // Clear persisted state on reset
+    clearPersistedSignupState();
+    return initialSignupState;
+  }),
 
   // Clear Error
   on(SignupActions.clearError, (state) => ({

@@ -24,7 +24,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         !isRefreshing &&
         !req.url.includes('/auth/login') &&
         !req.url.includes('/auth/refresh') &&
-        !req.url.includes('/auth/logout')
+        !req.url.includes('/auth/logout') &&
+        !req.url.includes('/auth/vendor/signup') &&
+        !req.url.includes('/auth/otp')
       ) {
         isRefreshing = true;
 

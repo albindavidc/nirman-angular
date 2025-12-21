@@ -6,9 +6,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -64,6 +64,7 @@ import { AuthLogoComponent } from '../../../shared/auth-logo/auth-logo.component
 export class VendorStep2Component implements OnInit {
   private readonly store = inject(Store);
   private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
 
   form!: FormGroup;
   loading$: Observable<boolean>;
@@ -81,6 +82,14 @@ export class VendorStep2Component implements OnInit {
   }
 
   ngOnInit(): void {
+    // Check if userId exists, redirect to step 1 if not
+    this.userId$.pipe(take(1)).subscribe((userId) => {
+      if (!userId) {
+        this.router.navigate(['/auth/signup/vendor/step1']);
+        return;
+      }
+    });
+
     this.form = this.fb.group({
       companyName: ['', [Validators.required, Validators.minLength(2)]],
       registrationNumber: ['', [Validators.required]],
@@ -110,35 +119,42 @@ export class VendorStep2Component implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.userId$
-        .subscribe((userId) => {
-          if (userId) {
-            const formValue = this.form.value;
+      this.userId$.pipe(take(1)).subscribe((userId) => {
+        if (!userId) {
+          // Redirect to step 1 if userId is missing
+          this.store.dispatch(
+            SignupActions.submitStep2Failure({
+              error: 'Session expired. Please start the signup process again.',
+            })
+          );
+          this.router.navigate(['/auth/signup/vendor/step1']);
+          return;
+        }
 
-            this.store.dispatch(
-              SignupActions.submitStep2({
-                data: {
-                  userId,
-                  companyName: formValue.companyName,
-                  registrationNumber: formValue.registrationNumber,
-                  taxNumber: formValue.taxNumber || undefined,
-                  yearsInBusiness: formValue.yearsInBusiness
-                    ? parseInt(formValue.yearsInBusiness, 10)
-                    : undefined,
-                  addressStreet: formValue.addressStreet || undefined,
-                  addressCity: formValue.addressCity || undefined,
-                  addressState: formValue.addressState || undefined,
-                  addressZipCode: formValue.addressZipCode || undefined,
-                  productsServices:
-                    this.productsServices.length > 0
-                      ? this.productsServices
-                      : undefined,
-                },
-              })
-            );
-          }
-        })
-        .unsubscribe();
+        const formValue = this.form.value;
+
+        this.store.dispatch(
+          SignupActions.submitStep2({
+            data: {
+              userId,
+              companyName: formValue.companyName,
+              registrationNumber: formValue.registrationNumber,
+              taxNumber: formValue.taxNumber || undefined,
+              yearsInBusiness: formValue.yearsInBusiness
+                ? parseInt(formValue.yearsInBusiness, 10)
+                : undefined,
+              addressStreet: formValue.addressStreet || undefined,
+              addressCity: formValue.addressCity || undefined,
+              addressState: formValue.addressState || undefined,
+              addressZipCode: formValue.addressZipCode || undefined,
+              productsServices:
+                this.productsServices.length > 0
+                  ? this.productsServices
+                  : undefined,
+            },
+          })
+        );
+      });
     } else {
       this.form.markAllAsTouched();
     }

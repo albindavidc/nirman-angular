@@ -14,6 +14,36 @@ export class SignupEffects {
   private readonly router = inject(Router);
   private readonly notification = inject(NotificationService);
 
+  /**
+   * Converts backend error messages to user-friendly messages
+   */
+  private getErrorMessage(error: unknown, defaultMessage: string): string {
+    const httpError = error as { error?: { message?: string } };
+    const message = httpError?.error?.message || defaultMessage;
+
+    // Map technical error messages to user-friendly ones
+    const errorMappings: Record<string, string> = {
+      'Database Error':
+        'We are experiencing technical difficulties. Please try again later.',
+      'Server selection timeout':
+        'We are experiencing technical difficulties. Please try again later.',
+      'No available servers':
+        'We are experiencing technical difficulties. Please try again later.',
+      'Internal Server Error': 'Something went wrong. Please try again later.',
+      connection:
+        'Unable to connect to the server. Please check your internet connection.',
+    };
+
+    // Check if the message contains any technical error keywords
+    for (const [keyword, friendlyMessage] of Object.entries(errorMappings)) {
+      if (message.toLowerCase().includes(keyword.toLowerCase())) {
+        return friendlyMessage;
+      }
+    }
+
+    return message;
+  }
+
   submitStep1$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SignupActions.submitStep1),
@@ -25,7 +55,10 @@ export class SignupEffects {
           catchError((error) =>
             of(
               SignupActions.submitStep1Failure({
-                error: error.error?.message || 'Failed to submit step 1',
+                error: this.getErrorMessage(
+                  error,
+                  'Failed to create your account. Please try again.'
+                ),
               })
             )
           )
@@ -54,7 +87,10 @@ export class SignupEffects {
           catchError((error) =>
             of(
               SignupActions.submitStep2Failure({
-                error: error.error?.message || 'Failed to submit step 2',
+                error: this.getErrorMessage(
+                  error,
+                  'Failed to save company details. Please try again.'
+                ),
               })
             )
           )
@@ -99,12 +135,14 @@ export class SignupEffects {
             return SignupActions.sendOtpSuccess();
           }),
           catchError((error) => {
-            this.notification.error(
-              error.error?.message || 'Failed to send OTP'
+            const errorMessage = this.getErrorMessage(
+              error,
+              'Failed to send verification code. Please try again.'
             );
+            this.notification.error(errorMessage);
             return of(
               SignupActions.sendOtpFailure({
-                error: error.error?.message || 'Failed to send OTP',
+                error: errorMessage,
               })
             );
           })
@@ -122,7 +160,10 @@ export class SignupEffects {
           catchError((error) =>
             of(
               SignupActions.verifyOtpFailure({
-                error: error.error?.message || 'Invalid OTP',
+                error: this.getErrorMessage(
+                  error,
+                  'Invalid verification code. Please check and try again.'
+                ),
               })
             )
           )
@@ -153,12 +194,14 @@ export class SignupEffects {
             return SignupActions.resendOtpSuccess();
           }),
           catchError((error) => {
-            this.notification.error(
-              error.error?.message || 'Failed to resend OTP'
+            const errorMessage = this.getErrorMessage(
+              error,
+              'Failed to resend verification code. Please try again.'
             );
+            this.notification.error(errorMessage);
             return of(
               SignupActions.resendOtpFailure({
-                error: error.error?.message || 'Failed to resend OTP',
+                error: errorMessage,
               })
             );
           })
