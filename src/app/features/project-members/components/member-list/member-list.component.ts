@@ -1,17 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatTooltipModule } from '@angular/material/tooltip'; // Added this
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSelectModule } from '@angular/material/select'; // Added this for roles filter
+import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Member } from '../../models/member.model';
@@ -20,15 +17,15 @@ import * as MemberSelectors from '../../store/member.selectors';
 import { MemberAddEditModalComponent } from '../member-add-edit-modal/member-add-edit-modal.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import { TableColumn } from '../../../../shared/components/table/table.models';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-member-list',
   standalone: true,
   imports: [
     CommonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
     MatButtonModule,
     MatIconModule,
     MatInputModule,
@@ -39,23 +36,25 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
     MatTooltipModule,
     MatSelectModule,
     ReactiveFormsModule,
+    TableComponent,
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.scss',
 })
 export class MemberListComponent implements OnInit {
-  displayedColumns: string[] = [
-    'member',
-    'role',
-    'skills',
-    'email',
-    'phone',
-    'assignedSince',
-    'status',
-    'actions',
+  columns: TableColumn[] = [
+    { key: 'member', header: 'Member', type: 'template', sortable: true },
+    { key: 'role', header: 'Role', type: 'template', sortable: true },
+    { key: 'skills', header: 'Skills', type: 'template' },
+    { key: 'email', header: 'Email', type: 'template', sortable: true },
+    { key: 'phoneNumber', header: 'Phone', type: 'text' },
+    { key: 'createdAt', header: 'Joined Date', type: 'date', sortable: true },
+    { key: 'status', header: 'Status', type: 'template', sortable: true },
+    { key: 'actions', header: 'Actions', type: 'template' },
   ];
-  dataSource = new MatTableDataSource<Member>([]);
+
   totalMembers$: Observable<number>;
+  members$: Observable<Member[]>;
   loading$: Observable<boolean>;
   workerCount$: Observable<number>;
   supervisorCount$: Observable<number>;
@@ -64,27 +63,29 @@ export class MemberListComponent implements OnInit {
   searchControl = new FormControl('');
   roleControl = new FormControl('');
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  pageSize = 10;
+  pageIndex = 0;
 
   constructor(private store: Store, private dialog: MatDialog) {
     this.totalMembers$ = this.store.select(MemberSelectors.selectMemberTotal);
     this.loading$ = this.store.select(MemberSelectors.selectMemberLoading);
+    this.members$ = this.store.select(MemberSelectors.selectAllMembers);
 
     // Compute counts from the members list
-    const members$ = this.store.select(MemberSelectors.selectAllMembers);
-    this.workerCount$ = members$.pipe(
+    // Note: This relies on loaded members. If loading is paginated, this count only reflects current page?
+    // The original code did this, so preserving behavior. Ideally counts should come from backend stats.
+    this.workerCount$ = this.members$.pipe(
       map(
         (members: Member[]) => members.filter((m) => m.role === 'worker').length
       )
     );
-    this.supervisorCount$ = members$.pipe(
+    this.supervisorCount$ = this.members$.pipe(
       map(
         (members: Member[]) =>
           members.filter((m) => m.role === 'supervisor').length
       )
     );
-    this.activeCount$ = members$.pipe(
+    this.activeCount$ = this.members$.pipe(
       map(
         (members: Member[]) =>
           members.filter((m) => m.userStatus === 'active').length
@@ -95,19 +96,15 @@ export class MemberListComponent implements OnInit {
   ngOnInit(): void {
     this.loadMembers();
 
-    this.store.select(MemberSelectors.selectAllMembers).subscribe((members) => {
-      this.dataSource.data = members;
-    });
-
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(() => {
-        this.paginator.pageIndex = 0;
+        this.pageIndex = 0;
         this.loadMembers();
       });
 
     this.roleControl.valueChanges.subscribe(() => {
-      this.paginator.pageIndex = 0;
+      this.pageIndex = 0;
       this.loadMembers();
     });
   }
@@ -115,15 +112,17 @@ export class MemberListComponent implements OnInit {
   loadMembers() {
     this.store.dispatch(
       MemberActions.loadMembers({
-        page: this.paginator ? this.paginator.pageIndex + 1 : 1,
-        limit: this.paginator ? this.paginator.pageSize : 10,
+        page: this.pageIndex + 1,
+        limit: this.pageSize,
         search: this.searchControl.value || '',
         role: this.roleControl.value || '',
       })
     );
   }
 
-  onPageChange(event: any) {
+  onPageChange(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
     this.loadMembers();
   }
 

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
@@ -11,7 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import {
   trigger,
   transition,
@@ -25,6 +24,8 @@ import * as VendorActions from '../../store/vendor.actions';
 import * as VendorSelectors from '../../store/vendor.selectors';
 import { Vendor } from '../../models/vendor.models';
 import { VendorEditModalComponent } from '../vendor-edit-modal/vendor-edit-modal.component';
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import { TableColumn } from '../../../../shared/components/table/table.models';
 
 @Component({
   selector: 'app-vendor-list',
@@ -33,7 +34,6 @@ import { VendorEditModalComponent } from '../vendor-edit-modal/vendor-edit-modal
     CommonModule,
     MatIconModule,
     MatButtonModule,
-    MatTableModule,
     MatMenuModule,
     MatDialogModule,
     MatChipsModule,
@@ -41,7 +41,7 @@ import { VendorEditModalComponent } from '../vendor-edit-modal/vendor-edit-modal
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
-    MatPaginatorModule,
+    TableComponent,
   ],
   templateUrl: './vendor-list.component.html',
   styleUrl: './vendor-list.component.scss',
@@ -72,15 +72,6 @@ import { VendorEditModalComponent } from '../vendor-edit-modal/vendor-edit-modal
         ),
       ]),
     ]),
-    trigger('tableRowAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateX(-10px)' }),
-        animate(
-          '200ms ease-out',
-          style({ opacity: 1, transform: 'translateX(0)' })
-        ),
-      ]),
-    ]),
   ],
 })
 export class VendorListComponent implements OnInit {
@@ -96,12 +87,12 @@ export class VendorListComponent implements OnInit {
   pageSize = 10;
   pageSizeOptions = [5, 10, 25, 50];
 
-  displayedColumns: string[] = [
-    'vendor',
-    'contact',
-    'category',
-    'status',
-    'actions',
+  columns: TableColumn[] = [
+    { key: 'vendor', header: 'Vendor', type: 'template' },
+    { key: 'contact', header: 'Contact', type: 'template' },
+    { key: 'category', header: 'Category', type: 'template' },
+    { key: 'status', header: 'Status', type: 'template' },
+    { key: 'actions', header: 'Actions', type: 'template', sortable: false },
   ];
 
   statCards = [

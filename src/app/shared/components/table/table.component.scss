@@ -1,0 +1,83 @@
+$primary-color: #3f51b5; // Replace with actual variable if available
+$hover-color: rgba(63, 81, 181, 0.04);
+$border-color: #e0e0e0;
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .table-scroll-container {
+    overflow: auto;
+    max-height: 70vh; // Adjust as needed
+  }
+
+  table.app-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th.mat-header-cell {
+      background-color: #f9fafb;
+      color: #6b7280;
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      padding: 16px;
+      border-bottom: 1px solid $border-color;
+      white-space: nowrap;
+
+      &:first-of-type {
+        border-top-left-radius: 8px;
+      }
+
+      &:last-of-type {
+        border-top-right-radius: 8px;
+      }
+    }
+
+    td.mat-cell {
+      padding: 16px;
+      font-size: 0.875rem;
+      color: #374151;
+      border-bottom: 1px solid $border-color;
+    }
+
+    tr.table-row {
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: $hover-color;
+        cursor: pointer;
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+
+    .no-data-cell {
+      text-align: center;
+      padding: 48px;
+      color: #9ca3af;
+      font-style: italic;
+    }
+  }
+}
