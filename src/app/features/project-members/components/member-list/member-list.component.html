@@ -162,29 +162,31 @@
     </ng-template>
 
     <ng-template #actionsTemplate let-row>
-      <button
-        mat-stroked-button
-        class="action-btn"
-        (click)="openEditModal(row)"
-      >
-        Edit
-      </button>
-      <button
-        mat-stroked-button
-        class="action-btn remove"
-        *ngIf="row.userStatus !== 'blocked'"
-        (click)="blockMember(row)"
-      >
-        Block
-      </button>
-      <button
-        mat-stroked-button
-        class="action-btn active"
-        *ngIf="row.userStatus === 'blocked'"
-        (click)="unblockMember(row)"
-      >
-        Unblock
-      </button>
+      <div class="actions-container">
+        <button
+          mat-stroked-button
+          class="action-btn"
+          (click)="openEditModal(row)"
+        >
+          Edit
+        </button>
+        <button
+          mat-stroked-button
+          class="action-btn remove"
+          *ngIf="row.userStatus !== 'blocked'"
+          (click)="blockMember(row)"
+        >
+          Block
+        </button>
+        <button
+          mat-stroked-button
+          class="action-btn active"
+          *ngIf="row.userStatus === 'blocked'"
+          (click)="unblockMember(row)"
+        >
+          Unblock
+        </button>
+      </div>
     </ng-template>
   </div>
 </div>

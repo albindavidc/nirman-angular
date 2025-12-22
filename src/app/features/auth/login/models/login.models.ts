@@ -15,6 +15,7 @@ export interface LoginResponse {
     vendorStatus?: string;
     rejectionReason?: string;
     vendorId?: string;
+    profilePhotoUrl?: string;
   };
 }
 

@@ -80,16 +80,25 @@
 
   <!-- User Profile -->
   @if (user$ | async; as user) {
-  <div class="user-profile">
-    <div class="avatar">
-      {{ getInitials(user.firstName, user.lastName) }}
+  <a routerLink="/profile" class="user-profile-link">
+    <div class="user-profile">
+      @if (user.profilePhotoUrl) {
+      <img
+        [src]="getProfilePhotoUrl(user.profilePhotoUrl)"
+        alt="Profile"
+        class="avatar avatar-image"
+      />
+      } @else {
+      <div class="avatar">
+        {{ getInitials(user.firstName, user.lastName) }}
+      </div>
+      } @if (!layoutService.isSidebarCollapsed()) {
+      <div class="user-info">
+        <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+        <span class="user-role">{{ user.role | titlecase }}</span>
+      </div>
+      }
     </div>
-    @if (!layoutService.isSidebarCollapsed()) {
-    <div class="user-info">
-      <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
-      <span class="user-role">{{ user.role | titlecase }}</span>
-    </div>
-    }
-  </div>
+  </a>
   }
 </aside>

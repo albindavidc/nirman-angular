@@ -305,4 +305,13 @@ export class SidebarComponent {
       lastName?.charAt(0) || ''
     }`.toUpperCase();
   }
+
+  getProfilePhotoUrl(url: string): string {
+    if (url.startsWith('/')) {
+      // Relative URL - prepend API base (remove /api/v1)
+      const baseUrl = 'http://localhost:3000';
+      return `${baseUrl}${url}`;
+    }
+    return url;
+  }
 }

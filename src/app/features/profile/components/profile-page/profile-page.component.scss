@@ -1,0 +1,256 @@
+.profile-container {
+  padding: 32px;
+  background-color: var(--md-sys-color-background);
+  min-height: 100vh;
+  color: var(--md-sys-color-on-surface);
+  max-width: 900px;
+  margin: 0 auto;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+
+    .title-section {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+
+      .icon-wrapper {
+        width: 56px;
+        height: 56px;
+        background: var(--md-sys-color-primary-container);
+        padding: 12px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+          color: var(--md-sys-color-primary);
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+        }
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--md-sys-color-primary);
+      }
+
+      .subtitle {
+        margin: 4px 0 0;
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+  }
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .profile-card,
+  .form-card {
+    background: var(--md-sys-color-surface-container-high);
+    border-radius: 24px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+  }
+
+  .profile-card {
+    .profile-header {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      padding: 16px;
+
+      .avatar-upload-wrapper {
+        position: relative;
+        cursor: pointer;
+        border-radius: 50%;
+        overflow: hidden;
+
+        &:hover .avatar-overlay {
+          opacity: 1;
+        }
+      }
+
+      .avatar-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--md-sys-color-primary) 0%,
+          var(--md-sys-color-secondary) 100%
+        );
+        color: var(--md-sys-color-on-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .avatar-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+      }
+
+      .avatar-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        border-radius: 50%;
+
+        mat-icon {
+          color: white;
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+        }
+      }
+
+      .profile-meta {
+        h2 {
+          margin: 0 0 8px;
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--md-sys-color-on-surface);
+        }
+
+        .role-badge {
+          display: inline-block;
+          background: var(--md-sys-color-primary-container);
+          color: var(--md-sys-color-on-primary-container);
+          padding: 4px 12px;
+          border-radius: 16px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 8px;
+        }
+
+        .email {
+          margin: 8px 0 0;
+          color: var(--md-sys-color-on-surface-variant);
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  .form-card {
+    mat-card-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--md-sys-color-on-surface);
+
+        mat-icon {
+          color: var(--md-sys-color-primary);
+        }
+      }
+    }
+
+    mat-card-content {
+      padding: 24px;
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+
+        @media (max-width: 600px) {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .full-width {
+        width: 100%;
+      }
+
+      mat-form-field {
+        ::ng-deep .mat-mdc-text-field-wrapper {
+          background-color: var(--md-sys-color-surface-container);
+          border-radius: 12px;
+        }
+
+        ::ng-deep .mdc-notched-outline {
+          border-radius: 12px;
+        }
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+
+        button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          border-radius: 24px;
+          padding: 0 24px;
+          height: 48px;
+
+          mat-spinner {
+            margin-right: 8px;
+          }
+
+          // Target Angular Material button label for proper alignment
+          ::ng-deep .mdc-button__label {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+          }
+
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
+}

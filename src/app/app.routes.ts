@@ -64,6 +64,13 @@ export const routes: Routes = [
             (m) => m.settingsRoutes
           ),
       },
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('./features/profile/profile.routes').then(
+            (m) => m.PROFILE_ROUTES
+          ),
+      },
       // Other protected routes will go here
     ],
   },

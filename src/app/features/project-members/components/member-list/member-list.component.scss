@@ -345,12 +345,21 @@
           }
         }
 
+        .actions-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          flex-flow: row nowrap; // Force single line
+          white-space: nowrap;
+        }
+
         .action-btn {
-          height: 36px;
-          padding: 0 16px;
-          font-size: 0.8125rem;
-          margin-right: 8px;
-          border-radius: 20px;
+          height: 32px; // Reduced height
+          padding: 0 12px; // Reduced padding
+          font-size: 0.75rem; // Reduced font size
+          margin-right: 0;
+          border-radius: 16px;
           border-color: var(--md-sys-color-outline-variant);
           color: var(--md-sys-color-on-surface-variant);
 

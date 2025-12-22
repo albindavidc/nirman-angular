@@ -56,6 +56,21 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.22.1
+      filepond:
+        specifier: ^4.32.10
+        version: 4.32.10
+      filepond-plugin-file-validate-type:
+        specifier: ^1.2.9
+        version: 1.2.9(filepond@4.32.10)
+      filepond-plugin-image-exif-orientation:
+        specifier: ^1.0.11
+        version: 1.0.11(filepond@4.32.10)
+      filepond-plugin-image-preview:
+        specifier: ^4.6.12
+        version: 4.6.12(filepond@4.32.10)
+      ngx-filepond:
+        specifier: ^7.0.3
+        version: 7.0.3(@angular/common@20.3.15(@angular/core@20.3.15(@angular/compiler@20.3.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.15(@angular/compiler@20.3.15)(rxjs@7.8.2)(zone.js@0.15.1))(filepond@4.32.10)
       rxjs:
         specifier: ~7.8.0
         version: 7.8.2
@@ -2092,6 +2107,24 @@ packages:
     resolution: {integrity: sha512-XXTUwCvisa5oacNGRP9SfNtYBNAMi+RPwBFmblZEF7N7swHYQS6/Zfk7SRwx4D5j3CH211YNRco1DEMNVfZCnQ==}
     engines: {node: '>=16.0.0'}
 
+  filepond-plugin-file-validate-type@1.2.9:
+    resolution: {integrity: sha512-Tzv07aNdZvjUXDRA3XL16QMEvh6llDrXlcZ6W0eTHQ+taHaVg/JKJTFs/AViO+6ZcpPCcQStbhYEL2HoS+vldw==}
+    peerDependencies:
+      filepond: '>=1.x <5.x'
+
+  filepond-plugin-image-exif-orientation@1.0.11:
+    resolution: {integrity: sha512-hLBc12Fk6Zkj3L8mSAn+elugHOqT5rLUbgVXQQIQjMe0FsGjtpoxqeVR6jt4IWHGat2L9sFAgU2TGmd1mqosCg==}
+    peerDependencies:
+      filepond: '>=3.x <5.x'
+
+  filepond-plugin-image-preview@4.6.12:
+    resolution: {integrity: sha512-Y8ETX5QVV0mbPB0586UH8AUmG9tZg8PuN5bdEAIlZVJFTct5ebViJ7+Am94/VhTPjLqZjBf1zmDq5JU6XRsZKw==}
+    peerDependencies:
+      filepond: '>=4.x <5.x'
+
+  filepond@4.32.10:
+    resolution: {integrity: sha512-uflpIL+rfAgsYk7HgXugh7ELlHNHLTPtIHfvuq0gv3x2qNfVxdGA6T7RPxMh9Vji8ysXstXkDHVXQ4hY38MPTQ==}
+
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
@@ -2718,6 +2751,13 @@ packages:
   negotiator@1.0.0:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
+
+  ngx-filepond@7.0.3:
+    resolution: {integrity: sha512-B0Cm9PSu1MSXqloUDvU0F3B3b0OW9Jok4P/eDmN06YEv3Cyu9/ietWq9Q2fldOC7/EiJVa1918NMTQT7q0L6DA==}
+    peerDependencies:
+      '@angular/common': '>=14.x'
+      '@angular/core': '>=14.x'
+      filepond: '>=4.19.1 <5.x'
 
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
@@ -5623,6 +5663,20 @@ snapshots:
     dependencies:
       flat-cache: 4.0.1
 
+  filepond-plugin-file-validate-type@1.2.9(filepond@4.32.10):
+    dependencies:
+      filepond: 4.32.10
+
+  filepond-plugin-image-exif-orientation@1.0.11(filepond@4.32.10):
+    dependencies:
+      filepond: 4.32.10
+
+  filepond-plugin-image-preview@4.6.12(filepond@4.32.10):
+    dependencies:
+      filepond: 4.32.10
+
+  filepond@4.32.10: {}
+
   fill-range@7.1.1:
     dependencies:
       to-regex-range: 5.0.1
@@ -6301,6 +6355,13 @@ snapshots:
   negotiator@0.6.3: {}
 
   negotiator@1.0.0: {}
+
+  ngx-filepond@7.0.3(@angular/common@20.3.15(@angular/core@20.3.15(@angular/compiler@20.3.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.15(@angular/compiler@20.3.15)(rxjs@7.8.2)(zone.js@0.15.1))(filepond@4.32.10):
+    dependencies:
+      '@angular/common': 20.3.15(@angular/core@20.3.15(@angular/compiler@20.3.15)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
+      '@angular/core': 20.3.15(@angular/compiler@20.3.15)(rxjs@7.8.2)(zone.js@0.15.1)
+      filepond: 4.32.10
+      tslib: 2.8.1
 
   node-addon-api@6.1.0:
     optional: true

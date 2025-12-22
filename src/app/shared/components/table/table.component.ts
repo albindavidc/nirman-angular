@@ -8,6 +8,7 @@ import {
   ViewChild,
   AfterViewInit,
   TemplateRef,
+  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -36,6 +37,7 @@ import { TableColumn } from './table.models';
   ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TableComponent implements OnChanges, AfterViewInit {
   @Input() data: any[] = [];
