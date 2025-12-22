@@ -12,6 +12,9 @@ export interface LoginResponse {
     firstName: string;
     lastName: string;
     role: string;
+    vendorStatus?: string;
+    rejectionReason?: string;
+    vendorId?: string;
   };
 }
 

@@ -130,8 +130,8 @@ export class VendorEffects {
   rejectVendor$ = createEffect(() =>
     this.actions$.pipe(
       ofType(VendorActions.rejectVendor),
-      exhaustMap(({ id }) =>
-        this.vendorService.rejectVendor(id).pipe(
+      exhaustMap(({ id, reason }) =>
+        this.vendorService.rejectVendor(id, reason).pipe(
           map((vendor) => {
             this.notification.success('Vendor rejected');
             return VendorActions.updateVendorSuccess({ vendor });

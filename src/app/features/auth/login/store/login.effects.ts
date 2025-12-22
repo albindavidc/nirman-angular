@@ -43,7 +43,7 @@ export class LoginEffects {
           localStorage.setItem('user', JSON.stringify(response.user));
 
           // Role-based navigation
-          const route = this.getRouteByRole(response.user.role);
+          const route = this.getRouteByRole(response.user);
           this.router.navigate([route]);
         })
       ),
@@ -53,14 +53,35 @@ export class LoginEffects {
   /**
    * Returns the default route for each user role
    */
-  private getRouteByRole(role: string): string {
-    switch (role.toLowerCase()) {
+  private getRouteByRole(user: any): string {
+    const role = user.role.toLowerCase();
+
+    console.log('Login Redirection Debug:', {
+      role,
+      vendorStatus: user.vendorStatus,
+      rejectionReason: user.rejectionReason,
+    });
+
+    if (role === 'vendor') {
+      const status = user.vendorStatus?.toLowerCase();
+
+      console.log('Processed Vendor Status:', status);
+
+      if (status === 'approved') {
+        return '/dashboard/vendor';
+      } else if (status === 'rejected' || status === 'blacklisted') {
+        return '/auth/application-rejected';
+      }
+
+      // Default to pending for 'pending' status or undefined/unknown status
+      return '/auth/pending-approval';
+    }
+
+    switch (role) {
       case 'admin':
         return '/vendor-management';
       case 'supervisor':
         return '/dashboard/supervisor';
-      case 'vendor':
-        return '/dashboard/vendor';
       case 'worker':
         return '/dashboard/worker';
       default:

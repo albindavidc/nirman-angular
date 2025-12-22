@@ -77,7 +77,7 @@ export const approveVendor = createAction(
 
 export const rejectVendor = createAction(
   '[Vendor] Reject Vendor',
-  props<{ id: string }>()
+  props<{ id: string; reason: string }>()
 );
 
 export const blacklistVendor = createAction(

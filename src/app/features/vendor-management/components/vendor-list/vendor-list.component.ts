@@ -33,6 +33,10 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import {
+  ReasonDialogComponent,
+  ReasonDialogData,
+} from '../../../../shared/components/reason-dialog/reason-dialog.component';
 
 @Component({
   selector: 'app-vendor-list',
@@ -195,19 +199,21 @@ export class VendorListComponent implements OnInit {
   }
 
   rejectVendor(vendor: Vendor): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+    const dialogRef = this.dialog.open(ReasonDialogComponent, {
+      width: '450px',
       data: {
         title: 'Reject Vendor',
-        message: `Are you sure you want to reject ${vendor.companyName}?`,
-        confirmButtonText: 'Reject',
-        confirmButtonColor: 'warn',
-      } as ConfirmDialogData,
+        message: `Please provide a reason for rejecting ${vendor.companyName}.`,
+        confirmButtonText: 'Reject Vendor',
+      } as ReasonDialogData,
+      panelClass: 'dark-dialog',
     });
 
-    dialogRef.afterClosed().subscribe((confirmed) => {
-      if (confirmed) {
-        this.store.dispatch(VendorActions.rejectVendor({ id: vendor.id }));
+    dialogRef.afterClosed().subscribe((reason) => {
+      if (reason) {
+        this.store.dispatch(
+          VendorActions.rejectVendor({ id: vendor.id, reason })
+        );
       }
     });
   }

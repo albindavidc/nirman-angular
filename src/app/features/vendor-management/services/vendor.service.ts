@@ -51,8 +51,12 @@ export class VendorService {
     return this.updateVendor(id, { vendorStatus: 'approved' });
   }
 
-  rejectVendor(id: string): Observable<Vendor> {
-    return this.updateVendor(id, { vendorStatus: 'rejected' });
+  rejectVendor(id: string, reason: string): Observable<Vendor> {
+    return this.http.patch<Vendor>(`${this.apiUrl}/${id}/reject`, { reason });
+  }
+
+  requestRecheck(id: string): Observable<Vendor> {
+    return this.http.patch<Vendor>(`${this.apiUrl}/${id}/request-recheck`, {});
   }
 
   blacklistVendor(id: string): Observable<Vendor> {

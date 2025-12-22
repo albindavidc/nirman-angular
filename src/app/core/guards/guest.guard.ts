@@ -10,18 +10,26 @@ export const GuestGuard: CanActivateFn = (route, state) => {
     const role = user.role?.toLowerCase();
 
     let targetRoute = '/dashboard';
-    if (role === 'admin') {
+
+    if (role === 'vendor') {
+      const status = user.vendorStatus?.toLowerCase();
+      if (status === 'approved') {
+        targetRoute = '/dashboard/vendor';
+      } else if (status === 'rejected' || status === 'blacklisted') {
+        targetRoute = '/auth/application-rejected';
+      } else {
+        targetRoute = '/auth/pending-approval';
+      }
+    } else if (role === 'admin') {
       targetRoute = '/vendor-management';
     } else if (role === 'supervisor') {
       targetRoute = '/dashboard/supervisor';
-    } else if (role === 'vendor') {
-      targetRoute = '/dashboard/vendor';
     } else if (role === 'worker') {
       targetRoute = '/dashboard/worker';
     }
 
     router.navigate([targetRoute]);
-    return false;
+    return true;
   }
 
   return true;

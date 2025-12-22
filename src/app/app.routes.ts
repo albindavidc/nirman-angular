@@ -12,6 +12,22 @@ export const routes: Routes = [
       import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
   {
+    path: 'auth/pending-approval',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import(
+        './features/auth/pages/pending-approval/pending-approval.component'
+      ).then((m) => m.PendingApprovalComponent),
+  },
+  {
+    path: 'auth/application-rejected',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import(
+        './features/auth/pages/application-rejected/application-rejected.component'
+      ).then((m) => m.ApplicationRejectedComponent),
+  },
+  {
     path: '',
     canActivate: [AuthGuard],
 
