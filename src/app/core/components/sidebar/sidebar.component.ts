@@ -205,6 +205,11 @@ export class SidebarComponent {
           icon: 'folder_open',
           children: [
             { label: 'Projects', icon: 'work', route: '/projects' },
+            {
+              label: 'Project Members',
+              icon: 'group',
+              route: '/project-members',
+            },
             { label: 'Phases', icon: 'timelapse', route: '/phases' },
             {
               label: 'Phase Approvals',
@@ -273,8 +278,26 @@ export class SidebarComponent {
     })
   );
 
+  expandedMenu: string | null = null;
+
   toggleSidebar(): void {
     this.layoutService.toggleSidebar();
+  }
+
+  toggleSubmenu(label: string): void {
+    if (this.layoutService.isSidebarCollapsed()) return;
+
+    if (this.expandedMenu === label) {
+      this.expandedMenu = null;
+    } else {
+      this.expandedMenu = label;
+    }
+  }
+
+  isMenuExpanded(label: string): boolean {
+    return (
+      this.expandedMenu === label && !this.layoutService.isSidebarCollapsed()
+    );
   }
 
   getInitials(firstName: string, lastName: string): string {

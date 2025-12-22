@@ -8,22 +8,19 @@
   <nav class="nav-menu">
     @for (item of navItems$ | async; track item.label) { @if (item.children) {
     <!-- Parent with children (Popup Menu) -->
+    <!-- Parent with children -->
     <div class="nav-group">
+      <!-- Case 1: Sidebar Collapsed - Use Popup Menu -->
+      @if (layoutService.isSidebarCollapsed()) {
       <button
-        class="nav-item parent"
+        class="nav-item parent collapsed-mode"
         [matMenuTriggerFor]="submenu"
         #menuTrigger="matMenuTrigger"
+        [class.active]="menuTrigger.menuOpen"
       >
         <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
-        @if (!layoutService.isSidebarCollapsed()) {
-        <span class="nav-label">{{ item.label }}</span>
-        <mat-icon class="chevron">
-          {{ menuTrigger.menuOpen ? "expand_less" : "expand_more" }}
-        </mat-icon>
-        }
       </button>
 
-      <!-- Popup Menu -->
       <mat-menu #submenu="matMenu" class="sidebar-submenu-popup">
         @for (child of item.children; track child.label) {
         <a
@@ -37,6 +34,38 @@
         </a>
         }
       </mat-menu>
+      }
+
+      <!-- Case 2: Sidebar Expanded - Use Inline Accordion -->
+      @else {
+      <button
+        class="nav-item parent expanded-mode"
+        (click)="toggleSubmenu(item.label)"
+        [class.expanded]="isMenuExpanded(item.label)"
+      >
+        <div class="nav-content">
+          <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span class="nav-label">{{ item.label }}</span>
+        </div>
+        <mat-icon class="chevron">
+          {{ isMenuExpanded(item.label) ? "expand_less" : "expand_more" }}
+        </mat-icon>
+      </button>
+
+      @if (isMenuExpanded(item.label)) {
+      <div class="submenu-inline">
+        @for (child of item.children; track child.label) {
+        <a
+          class="nav-item child"
+          [routerLink]="child.route"
+          routerLinkActive="active"
+        >
+          <mat-icon class="nav-icon">{{ child.icon }}</mat-icon>
+          <span class="nav-label">{{ child.label }}</span>
+        </a>
+        }
+      </div>
+      } }
     </div>
     } @else {
     <!-- Simple nav item -->

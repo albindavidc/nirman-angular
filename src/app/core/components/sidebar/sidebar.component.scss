@@ -23,8 +23,12 @@
     .nav-item {
       justify-content: flex-start;
       padding: 12px;
-      padding-left: 16px;
-      width: 100%; // Ensure full width for centering
+      // padding-left: 16px; // Removed invalid property if it was causing issues, or just keep it simple
+      width: 100%;
+
+      .nav-icon {
+        margin-right: 0;
+      }
     }
 
     .user-profile {
@@ -49,14 +53,12 @@
   overflow-x: hidden;
   padding: 0 8px;
 
-  /* Hide scrollbar for Chrome, Safari and Opera */
+  /* Hide scrollbar */
   &::-webkit-scrollbar {
     display: none;
   }
-
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .nav-group {
@@ -66,7 +68,7 @@
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-start; // Changed from space-between to flex-start
   padding: 12px 16px;
   border-radius: 12px;
   color: var(--md-sys-color-on-surface-variant);
@@ -79,16 +81,65 @@
   width: 100%;
   text-align: left;
   transition: all 0.2s ease;
-  outline: none; // Remove focus outline
+  outline: none;
+
+  gap: 0; // Removing gap, using margin on icon instead for precise control
+
+  .nav-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &.parent.expanded-mode {
+    // Style for the parent button in expanded mode
+    justify-content: space-between;
+
+    &.expanded {
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+    }
+  }
+
+  &.child {
+    // Style for inline children
+    padding-left: 52px; // Indent child items
+    font-size: 0.85rem;
+    position: relative;
+
+    &.active {
+      background: var(
+        --md-sys-color-surface-variant
+      ); // Use subtle background for active child
+      color: var(--md-sys-color-primary);
+
+      .nav-icon {
+        color: var(--md-sys-color-primary);
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 28px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: var(--md-sys-color-primary);
+      }
+    }
+  }
 
   &:hover,
-  &.active {
+  &.active:not(.child) {
+    // Only highlight background for top-level or parent
     background: var(--md-sys-color-surface-container);
     color: var(--md-sys-color-on-surface);
   }
 
-  // Active state for router links
-  &.active {
+  // Specific active style for top-level non-parent items
+  &.active:not(.parent):not(.child) {
     background: var(--md-sys-color-primary-container);
     color: var(--md-sys-color-on-primary-container);
 
@@ -104,10 +155,10 @@
   height: 24px;
   color: var(--md-sys-color-on-surface-variant);
   flex-shrink: 0;
+  margin-right: 12px; // Explicit spacing between icon and text
 }
 
 .nav-label {
-  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -120,10 +171,18 @@
   transition: transform 0.2s ease;
 }
 
+// Inline Submenu Container
+.submenu-inline {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  // margin-top: 4px; No margin to keep it tight like accordion
+}
+
+// ... User Profile Styles (Keep existing)
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 12px;
   padding: 16px;
   margin: 8px;
   border-radius: 12px;
@@ -169,7 +228,7 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-// Global styles for MatMenu popup to ensure rounded corners
+// Global styles for MatMenu popup to ensure rounded corners (Keep existing)
 ::ng-deep .sidebar-submenu-popup {
   border-radius: 16px !important;
   overflow: hidden;
