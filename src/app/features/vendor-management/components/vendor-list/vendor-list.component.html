@@ -2,8 +2,19 @@
   <!-- Header -->
   <header class="page-header">
     <div class="header-content">
-      <h1 class="page-title">Vendor Management</h1>
-      <p class="page-subtitle">Review and approve vendor applications</p>
+      <div>
+        <h1 class="page-title">Vendor Management</h1>
+        <p class="page-subtitle">Review and approve vendor applications</p>
+      </div>
+      <button
+        mat-flat-button
+        color="primary"
+        class="add-btn"
+        (click)="openVendorModal()"
+      >
+        <mat-icon>add</mat-icon>
+        Add Vendor
+      </button>
     </div>
   </header>
 
@@ -28,19 +39,31 @@
     <div class="card-header">
       <h2>All Vendors</h2>
       <div class="header-actions">
-        <mat-form-field appearance="outline" class="search-field">
+        <mat-form-field
+          appearance="outline"
+          class="search-field"
+          subscriptSizing="dynamic"
+        >
           <mat-icon matPrefix>search</mat-icon>
           <input matInput placeholder="Search vendors..." />
         </mat-form-field>
-        <button
-          mat-flat-button
-          color="primary"
-          class="add-btn"
-          (click)="openVendorModal()"
+
+        <mat-form-field
+          appearance="outline"
+          class="filter-field"
+          subscriptSizing="dynamic"
         >
-          <mat-icon>add</mat-icon>
-          Add Vendor
-        </button>
+          <mat-select
+            [formControl]="statusFilter"
+            placeholder="Filter by Status"
+          >
+            <mat-option value="">All Statuses</mat-option>
+            <mat-option value="approved">Approved</mat-option>
+            <mat-option value="pending">Pending</mat-option>
+            <mat-option value="rejected">Rejected</mat-option>
+            <mat-option value="blacklisted">Blacklisted</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
 
@@ -132,6 +155,16 @@
         >
           <mat-icon>block</mat-icon>
           Blacklist
+        </button>
+        } @if (row.vendorStatus === 'blacklisted') {
+        <button
+          mat-stroked-button
+          class="unblacklist-btn"
+          (click)="unblacklistVendor(row)"
+          matTooltip="Unblacklist vendor"
+        >
+          <mat-icon>published_with_changes</mat-icon>
+          Unblacklist
         </button>
         }
         <button

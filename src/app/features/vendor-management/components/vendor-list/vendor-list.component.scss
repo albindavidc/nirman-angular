@@ -16,6 +16,12 @@
 .page-header {
   margin-bottom: 32px;
 
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .page-title {
     font-size: 2rem;
     font-weight: 600;
@@ -27,6 +33,29 @@
     font-size: 0.9rem;
     color: var(--md-sys-color-on-surface-variant);
     margin: 0;
+  }
+
+  .add-btn {
+    background-color: var(--md-sys-color-primary) !important;
+    color: var(--md-sys-color-on-primary) !important;
+    border-radius: 24px;
+    padding: 0 24px;
+    height: 48px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: var(--md-sys-color-primary-container) !important;
+      color: var(--md-sys-color-on-primary-container) !important;
+    }
   }
 }
 
@@ -153,33 +182,23 @@
     }
   }
 
-  .add-btn {
-    background-color: var(--md-sys-color-primary) !important;
-    color: var(--md-sys-color-on-primary) !important;
-    border-radius: 24px;
-    padding: 0 24px;
-    height: 48px;
-    font-weight: 500;
+  .header-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
-
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-
-    &:hover {
-      background-color: var(--md-sys-color-primary-container) !important;
-      color: var(--md-sys-color-on-primary-container) !important;
-    }
+    gap: 16px;
   }
 }
 
 .search-field {
   width: 300px;
+}
 
+.filter-field {
+  width: 200px;
+}
+
+.search-field,
+.filter-field {
   mat-icon {
     color: var(--md-sys-color-on-surface-variant);
     margin-right: 8px;
@@ -199,10 +218,23 @@
     padding: 0 16px !important;
     height: 48px;
     align-items: center;
+    margin: 0;
   }
 
   ::ng-deep .mat-mdc-input-element {
     margin-top: -4px; // Slight adjustment for vertical alignment
+  }
+
+  ::ng-deep .mat-mdc-select-trigger {
+    margin-top: -4px;
+  }
+
+  ::ng-deep .mat-mdc-select-value {
+    color: var(--md-sys-color-on-surface);
+  }
+
+  ::ng-deep .mat-mdc-select-arrow {
+    color: var(--md-sys-color-on-surface-variant);
   }
 }
 
@@ -433,6 +465,24 @@
       border-color: var(--md-sys-color-outline);
     }
   }
+
+  .unblacklist-btn {
+    color: var(--md-sys-color-primary);
+    border-color: var(--md-sys-color-primary);
+    border-radius: 20px;
+    height: 36px;
+    padding: 0 16px;
+    font-size: 0.8125rem;
+
+    mat-icon {
+      margin-right: 6px;
+      font-size: 18px;
+    }
+
+    &:hover {
+      background: rgba(var(--md-sys-color-primary-rgb), 0.1);
+    }
+  }
 }
 
 // Loading & Empty States
@@ -471,62 +521,4 @@
 .error-container mat-icon {
   color: var(--md-sys-color-error);
   opacity: 1;
-}
-
-// Paginator Theming - Align with Material Design Theme
-.mat-mdc-paginator {
-  background: transparent;
-  color: var(--md-sys-color-on-surface);
-
-  .mat-mdc-paginator-container {
-    padding: 16px 0;
-  }
-
-  .mat-mdc-paginator-page-size-label,
-  .mat-mdc-paginator-range-label {
-    color: var(--md-sys-color-on-surface-variant);
-  }
-
-  .mat-mdc-select-value {
-    color: var(--md-sys-color-on-surface);
-  }
-
-  .mat-mdc-paginator-navigation-previous,
-  .mat-mdc-paginator-navigation-next,
-  .mat-mdc-paginator-navigation-first,
-  .mat-mdc-paginator-navigation-last {
-    color: var(--md-sys-color-primary);
-
-    &:disabled {
-      color: var(--md-sys-color-outline);
-    }
-
-    &:hover:not(:disabled) {
-      background: var(--md-sys-color-primary-container);
-      border-radius: 50%;
-    }
-  }
-
-  .mat-mdc-icon-button {
-    color: var(--md-sys-color-primary);
-
-    &:disabled {
-      color: var(--md-sys-color-outline);
-    }
-
-    &:hover:not(:disabled) {
-      background: rgba(233, 193, 108, 0.1);
-    }
-  }
-
-  // Select dropdown styling
-  .mat-mdc-select {
-    .mat-mdc-select-trigger {
-      color: var(--md-sys-color-on-surface);
-    }
-
-    .mat-mdc-select-arrow {
-      color: var(--md-sys-color-primary);
-    }
-  }
 }

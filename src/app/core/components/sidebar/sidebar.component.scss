@@ -21,8 +21,9 @@
     }
 
     .nav-item {
-      justify-content: center;
+      justify-content: flex-start;
       padding: 12px;
+      padding-left: 16px;
       width: 100%; // Ensure full width for centering
     }
 

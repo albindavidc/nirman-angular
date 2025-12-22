@@ -1,16 +1,15 @@
-$primary-color: #3f51b5; // Replace with actual variable if available
-$hover-color: rgba(63, 81, 181, 0.04);
-$border-color: #e0e0e0;
+@use "@angular/material" as mat;
 
 .table-container {
   display: flex;
   flex-direction: column;
   position: relative;
-  background: #fff;
-  border-radius: 8px;
+  background: var(--md-sys-color-surface-container-high);
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px var(--md-sys-color-shadow),
+    0 2px 4px -1px var(--md-sys-color-shadow);
+  border: 1px solid var(--md-sys-color-outline-variant);
 
   .loading-overlay {
     position: absolute;
@@ -27,44 +26,39 @@ $border-color: #e0e0e0;
 
   .table-scroll-container {
     overflow: auto;
-    max-height: 70vh; // Adjust as needed
+    max-height: 70vh;
   }
 
   table.app-table {
     width: 100%;
     border-collapse: collapse;
+    background: transparent;
 
     th.mat-header-cell {
-      background-color: #f9fafb;
-      color: #6b7280;
-      font-weight: 600;
+      background-color: transparent;
+      color: var(--md-sys-color-on-surface-variant);
+      font-weight: 700;
       font-size: 0.75rem;
       letter-spacing: 0.05em;
-      padding: 16px;
-      border-bottom: 1px solid $border-color;
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
       white-space: nowrap;
-
-      &:first-of-type {
-        border-top-left-radius: 8px;
-      }
-
-      &:last-of-type {
-        border-top-right-radius: 8px;
-      }
+      text-transform: uppercase;
     }
 
     td.mat-cell {
       padding: 16px;
       font-size: 0.875rem;
-      color: #374151;
-      border-bottom: 1px solid $border-color;
+      color: var(--md-sys-color-on-surface);
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      vertical-align: middle;
     }
 
     tr.table-row {
       transition: background-color 0.2s ease;
 
       &:hover {
-        background-color: $hover-color;
+        background-color: var(--md-sys-color-surface-container);
         cursor: pointer;
       }
 
@@ -76,8 +70,67 @@ $border-color: #e0e0e0;
     .no-data-cell {
       text-align: center;
       padding: 48px;
-      color: #9ca3af;
+      color: var(--md-sys-color-on-surface-variant);
       font-style: italic;
+    }
+  }
+
+  mat-paginator {
+    background: transparent;
+    color: var(--md-sys-color-on-surface);
+    border-top: 1px solid var(--md-sys-color-outline-variant);
+
+    ::ng-deep {
+      .mat-mdc-paginator-container {
+        padding: 16px 0;
+      }
+
+      .mat-mdc-paginator-page-size-label,
+      .mat-mdc-paginator-range-label {
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .mat-mdc-select-value {
+        color: var(--md-sys-color-on-surface);
+      }
+
+      .mat-mdc-paginator-navigation-previous,
+      .mat-mdc-paginator-navigation-next,
+      .mat-mdc-paginator-navigation-first,
+      .mat-mdc-paginator-navigation-last {
+        color: var(--md-sys-color-primary);
+
+        &:disabled {
+          color: var(--md-sys-color-outline);
+        }
+
+        &:hover:not(:disabled) {
+          background: var(--md-sys-color-primary-container);
+          border-radius: 50%;
+        }
+      }
+
+      .mat-mdc-icon-button {
+        color: var(--md-sys-color-primary);
+
+        &:disabled {
+          color: var(--md-sys-color-outline);
+        }
+
+        &:hover:not(:disabled) {
+          background: rgba(233, 193, 108, 0.1);
+        }
+      }
+
+      .mat-mdc-select {
+        .mat-mdc-select-trigger {
+          color: var(--md-sys-color-on-surface);
+        }
+
+        .mat-mdc-select-arrow {
+          color: var(--md-sys-color-primary);
+        }
+      }
     }
   }
 }

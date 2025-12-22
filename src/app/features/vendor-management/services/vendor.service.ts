@@ -59,6 +59,10 @@ export class VendorService {
     return this.updateVendor(id, { vendorStatus: 'blacklisted' });
   }
 
+  unblacklistVendor(id: string): Observable<Vendor> {
+    return this.http.patch<Vendor>(`${this.apiUrl}/${id}/unblacklist`, {});
+  }
+
   deleteVendor(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

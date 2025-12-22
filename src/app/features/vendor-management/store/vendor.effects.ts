@@ -175,6 +175,30 @@ export class VendorEffects {
     )
   );
 
+  unblacklistVendor$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(VendorActions.unblacklistVendor),
+      exhaustMap(({ id }) =>
+        this.vendorService.unblacklistVendor(id).pipe(
+          map((vendor) => {
+            this.notification.success('Vendor unblacklisted');
+            return VendorActions.updateVendorSuccess({ vendor });
+          }),
+          catchError((error) => {
+            this.notification.error(
+              error.error?.message || 'Failed to unblacklist vendor'
+            );
+            return of(
+              VendorActions.updateVendorFailure({
+                error: error.error?.message || 'Failed to unblacklist vendor',
+              })
+            );
+          })
+        )
+      )
+    )
+  );
+
   loadStats$ = createEffect(() =>
     this.actions$.pipe(
       ofType(VendorActions.loadVendorStats),

@@ -85,6 +85,11 @@ export const blacklistVendor = createAction(
   props<{ id: string }>()
 );
 
+export const unblacklistVendor = createAction(
+  '[Vendor] Unblacklist Vendor',
+  props<{ id: string }>()
+);
+
 // Load Stats
 export const loadVendorStats = createAction('[Vendor] Load Stats');
 

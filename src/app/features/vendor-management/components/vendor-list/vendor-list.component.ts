@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
@@ -45,6 +48,8 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
+    MatSelectModule,
+    ReactiveFormsModule,
     TableComponent,
   ],
   templateUrl: './vendor-list.component.html',
@@ -90,6 +95,7 @@ export class VendorListComponent implements OnInit {
 
   pageSize = 10;
   pageSizeOptions = [5, 10, 25, 50];
+  statusFilter = new FormControl('');
 
   columns: TableColumn[] = [
     { key: 'vendor', header: 'Vendor', type: 'template' },
@@ -135,12 +141,21 @@ export class VendorListComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.store.dispatch(VendorActions.loadVendorStats());
+
+    this.statusFilter.valueChanges.subscribe(() => {
+      this.loadData(0); // Reset to first page on filter change
+    });
   }
 
   loadData(pageIndex = 0, pageSize = this.pageSize): void {
+    const filters: any = { page: pageIndex + 1, limit: pageSize };
+    if (this.statusFilter.value) {
+      filters.status = this.statusFilter.value;
+    }
+
     this.store.dispatch(
       VendorActions.loadVendors({
-        filters: { page: pageIndex + 1, limit: pageSize },
+        filters,
       })
     );
   }
@@ -211,6 +226,24 @@ export class VendorListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
         this.store.dispatch(VendorActions.blacklistVendor({ id: vendor.id }));
+      }
+    });
+  }
+
+  unblacklistVendor(vendor: Vendor): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Unblacklist Vendor',
+        message: `Are you sure you want to unblacklist ${vendor.companyName}? They will become Approved.`,
+        confirmButtonText: 'Unblacklist',
+        confirmButtonColor: 'primary',
+      } as ConfirmDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.store.dispatch(VendorActions.unblacklistVendor({ id: vendor.id }));
       }
     });
   }
